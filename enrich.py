@@ -17,7 +17,7 @@ import os
 
 import requests
 
-from sources.base import Listing
+from base import Listing
 
 _PROMPT = """Ты разбираешь объявление о продаже земельного участка под Петербургом.
 Верни СТРОГО JSON без markdown, по схеме:
