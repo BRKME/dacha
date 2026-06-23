@@ -36,6 +36,7 @@ class Source(BaseSource):
                         "sort": "PRICE"},
                 timeout=25,
             )
+            self.debug_dump(self.name, resp.text)
             if "captcha" in resp.text.lower() or resp.status_code in (403, 429):
                 return SourceResult(self.name, SourceStatus.BLOCKED,
                                     message="SmartCaptcha / 403")
