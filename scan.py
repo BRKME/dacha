@@ -88,9 +88,56 @@ def parse_args():
     return p.parse_args()
 
 
+def preflight(cfg: dict) -> None:
+    """Проверяет, что все модули свежие, и за ОДИН раз выводит список
+    устаревших/битых файлов. Спасает от починки по одному файлу за прогон."""
+    problems: list[str] = []
+    checks = {
+        "geo": ["haversine_km", "osm_nature"],
+        "filters": ["passes_hard", "score_listing"],
+        "enrich": ["enrich"],
+        "state": ["load_seen", "classify", "save"],
+        "notify": ["build_message", "send"],
+    }
+    for mod_name, attrs in checks.items():
+        try:
+            mod = importlib.import_module(mod_name)
+        except Exception as e:  # noqa: BLE001
+            problems.append(f"{mod_name}.py — не импортируется ({type(e).__name__})")
+            continue
+        for a in attrs:
+            if not hasattr(mod, a):
+                problems.append(f"{mod_name}.py — устарел: нет '{a}'")
+    try:
+        import base
+        for a in ("BaseSource", "Listing", "SourceResult", "SourceStatus"):
+            if not hasattr(base, a):
+                problems.append(f"base.py — нет '{a}'")
+        if hasattr(base, "BaseSource") and not hasattr(base.BaseSource, "debug_dump"):
+            problems.append("base.py — устарел: BaseSource без 'debug_dump'")
+    except Exception as e:  # noqa: BLE001
+        problems.append(f"base.py — не импортируется ({type(e).__name__})")
+    for name in cfg["sources"]:
+        try:
+            m = importlib.import_module(name)
+            if not hasattr(m, "Source"):
+                problems.append(f"{name}.py — нет класса Source")
+        except Exception as e:  # noqa: BLE001
+            problems.append(f"{name}.py — не импортируется ({type(e).__name__})")
+
+    if problems:
+        print("\n‼️  PREFLIGHT: эти файлы устарели/битые — перезалей их свежими:")
+        for p in problems:
+            print("   -", p)
+        print("(проверка остановила прогон до сетевых запросов)\n")
+        raise SystemExit(1)
+    print("[preflight] все модули на месте ✅")
+
+
 def main():
     args = parse_args()
     cfg = yaml.safe_load(CFG_PATH.read_text("utf-8"))
+    preflight(cfg)
     if args.no_enrich:
         cfg["enrich"]["enabled"] = False
     if args.no_osm:
