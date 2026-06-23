@@ -80,19 +80,29 @@ class BaseSource:
 
     @staticmethod
     def parse_price(text: str) -> Optional[int]:
-        """'3 950 000 ₽' / '3.95 млн' -> int рублей."""
+        """'3 950 000 ₽' / '3.95 млн' -> int рублей.
+
+        Цена привязывается к валютному маркеру (₽/руб/р.), иначе в карточке
+        с площадью/датами склеились бы все цифры. Если в тексте несколько
+        цен — берётся первая (для агрегатов лучше парсить цену на странице
+        самой карточки)."""
         if not text:
             return None
         t = text.lower().replace("\xa0", " ")
-        m = re.search(r"([\d\s.,]+)\s*млн", t)
+        # 'N млн' / 'N.N млн'
+        m = re.search(r"([\d\s.,]+?)\s*млн", t)
         if m:
             num = m.group(1).replace(" ", "").replace(",", ".")
             try:
                 return int(float(num) * 1_000_000)
             except ValueError:
-                return None
-        digits = re.sub(r"[^\d]", "", t)
-        return int(digits) if digits else None
+                pass
+        # число прямо перед валютой
+        m = re.search(r"(\d[\d\s.]*\d|\d)\s*(?:₽|руб|р\.|rub)", t)
+        if m:
+            digits = re.sub(r"[^\d]", "", m.group(1))
+            return int(digits) if digits else None
+        return None
 
     @staticmethod
     def parse_area_sot(text: str) -> Optional[float]:
@@ -121,3 +131,15 @@ class BaseSource:
             if tag in t:
                 return tag
         return ""
+
+    @staticmethod
+    def debug_dump(name: str, text: str) -> None:
+        """При DACHA_DEBUG=1 сохраняет сырой ответ в debug/<name>.html.
+        Нужен, чтобы чинить селекторы по живой разметке с Actions-IP."""
+        import os
+        if not os.environ.get("DACHA_DEBUG"):
+            return
+        from pathlib import Path
+        d = Path(__file__).resolve().parent / "debug"
+        d.mkdir(exist_ok=True)
+        (d / f"{name}.html").write_text((text or "")[:800_000], encoding="utf-8")
