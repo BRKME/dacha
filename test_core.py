@@ -9,10 +9,10 @@ from pathlib import Path
 
 import yaml
 
-from sources.base import BaseSource, Listing, SourceResult, SourceStatus
-from core import filters, geo, notify, state
+from base import BaseSource, Listing, SourceResult, SourceStatus
+import filters, geo, notify, state
 
-CFG = yaml.safe_load((Path(__file__).resolve().parent.parent / "config.yaml").read_text("utf-8"))
+CFG = yaml.safe_load((Path(__file__).resolve().parent / "config.yaml").read_text("utf-8"))
 
 
 # ── парс-хелперы ──────────────────────────────────────────────
@@ -82,7 +82,7 @@ def test_dedup_and_price_drop():
 # ── источники: импорт + честный BLOCKED без прокси ────────────
 def test_all_sources_import():
     for name in CFG["sources"]:
-        mod = importlib.import_module(f"sources.{name}")
+        mod = importlib.import_module(name)
         assert mod.Source(CFG).name == name
 
 
@@ -90,7 +90,7 @@ def test_avito_cian_blocked_without_proxy(monkeypatch):
     monkeypatch.delenv("AVITO_PROXY_URL", raising=False)
     monkeypatch.delenv("CIAN_PROXY_URL", raising=False)
     for name in ("avito", "cian"):
-        res = importlib.import_module(f"sources.{name}").Source(CFG).fetch()
+        res = importlib.import_module(name).Source(CFG).fetch()
         assert res.status == SourceStatus.BLOCKED
 
 
