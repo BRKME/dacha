@@ -20,6 +20,10 @@ def test_parse_price():
     assert BaseSource.parse_price("3 950 000 ₽") == 3_950_000
     assert BaseSource.parse_price("3.95 млн") == 3_950_000
     assert BaseSource.parse_price("") is None
+    # не склеивать цифры из площади/прочего — брать число у валюты
+    assert BaseSource.parse_price("Участок 12 сот, 2 500 000 руб, 12 сот") == 2_500_000
+    # без валютного маркера цена не угадывается (лучше None, чем мусор)
+    assert BaseSource.parse_price("Участок 12 сот ИЖС") is None
 
 
 def test_parse_area():
