@@ -22,12 +22,8 @@ class Source(BaseSource):
     name = "domclick"
 
     def fetch(self) -> SourceResult:
-        session = requests.Session()
-        session.headers.update({
-            "User-Agent": UA,
-            "Accept": "application/json",
-            "Accept-Language": "ru-RU,ru",
-        })
+        session = self.session(UA)
+        session.headers.update({"Accept": "application/json"})
         try:
             resp = session.get(
                 API_URL,

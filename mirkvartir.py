@@ -29,8 +29,7 @@ class Source(BaseSource):
     def fetch(self) -> SourceResult:
         max_price = self.cfg["hard"]["max_price_rub"]
         listings: list[Listing] = []
-        session = requests.Session()
-        session.headers.update({"User-Agent": UA, "Accept-Language": "ru-RU,ru"})
+        session = self.session(UA)
 
         queries = self.cfg["locations"]["primary"]
         try:

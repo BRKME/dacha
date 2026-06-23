@@ -27,8 +27,7 @@ class Source(BaseSource):
     name = "bank_torgi"
 
     def fetch(self) -> SourceResult:
-        session = requests.Session()
-        session.headers.update({"User-Agent": UA, "Accept-Language": "ru-RU,ru"})
+        session = self.session(UA)
         listings: list[Listing] = []
         try:
             resp = session.get(

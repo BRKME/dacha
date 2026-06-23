@@ -26,14 +26,13 @@ class Source(BaseSource):
     name = "avito"
 
     def fetch(self) -> SourceResult:
-        # Прокси из env (Phase 2). Без него — сразу честный BLOCKED.
-        proxy = os.environ.get("AVITO_PROXY_URL")
-        if not proxy:
+        # Прокси: source-specific или общий PROXY_URL. Без него — честный BLOCKED.
+        proxies = self.get_proxies("AVITO_PROXY_URL")
+        if not proxies:
             return SourceResult(
                 self.name, SourceStatus.BLOCKED,
-                message="нет AVITO_PROXY_URL; Авито недоступен с Actions-IP",
+                message="нет прокси (AVITO_PROXY_URL/PROXY_URL); Авито недоступен с Actions-IP",
             )
-        proxies = {"http": proxy, "https": proxy}
         try:
             resp = requests.get(
                 SEARCH_URL,

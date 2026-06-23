@@ -22,13 +22,12 @@ class Source(BaseSource):
     name = "cian"
 
     def fetch(self) -> SourceResult:
-        proxy = os.environ.get("CIAN_PROXY_URL")
-        if not proxy:
+        proxies = self.get_proxies("CIAN_PROXY_URL")
+        if not proxies:
             return SourceResult(
                 self.name, SourceStatus.BLOCKED,
-                message="нет CIAN_PROXY_URL; Циан недоступен с Actions-IP",
+                message="нет прокси (CIAN_PROXY_URL/PROXY_URL); Циан недоступен с Actions-IP",
             )
-        proxies = {"http": proxy, "https": proxy}
         body = {
             "jsonQuery": {
                 "_type": "suburbansale",

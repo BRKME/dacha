@@ -27,8 +27,7 @@ class Source(BaseSource):
     name = "yandex"
 
     def fetch(self) -> SourceResult:
-        session = requests.Session()
-        session.headers.update({"User-Agent": UA, "Accept-Language": "ru-RU,ru"})
+        session = self.session(UA)
         try:
             resp = session.get(
                 SEARCH_URL,

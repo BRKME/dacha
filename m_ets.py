@@ -24,8 +24,7 @@ class Source(BaseSource):
     name = "m_ets"
 
     def fetch(self) -> SourceResult:
-        s = requests.Session()
-        s.headers.update({"User-Agent": UA, "Accept-Language": "ru-RU,ru"})
+        s = self.session(UA)
         try:
             resp = s.get(SEARCH_URL,
                          params={"q": "земельный участок Ленинградская область",

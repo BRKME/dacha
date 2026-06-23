@@ -30,7 +30,9 @@ jobs:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID:   ${{ secrets.TELEGRAM_CHAT_ID }}
           XAI_API_KEY:        ${{ secrets.XAI_API_KEY }}
-          # Phase 2 (если появятся прокси):
+          # Общий РФ residential-прокси для всех источников:
+          PROXY_URL:          ${{ secrets.PROXY_URL }}
+          # Source-specific (опционально, переопределяют PROXY_URL):
           AVITO_PROXY_URL:    ${{ secrets.AVITO_PROXY_URL }}
           CIAN_PROXY_URL:     ${{ secrets.CIAN_PROXY_URL }}
         run: python scan.py

@@ -76,6 +76,41 @@ class BaseSource:
     def fetch(self) -> SourceResult:  # pragma: no cover - переопределяется
         raise NotImplementedError
 
+    # --- сеть с поддержкой общего прокси ---
+
+    @staticmethod
+    def get_proxies(source_specific_env: str = None) -> Optional[dict]:
+        """Единый прокси для всех источников.
+
+        Приоритет: source-specific env (AVITO_PROXY_URL и т.п.) → общий PROXY_URL.
+        Возвращает dict для requests или None если прокси не задан.
+        """
+        import os
+        url = None
+        if source_specific_env:
+            url = os.environ.get(source_specific_env)
+        if not url:
+            url = os.environ.get("PROXY_URL")
+        if not url:
+            return None
+        return {"http": url, "https": url}
+
+    def session(self, ua: str = None) -> "requests.Session":
+        """requests.Session с UA и общим прокси (если задан PROXY_URL)."""
+        import requests
+        s = requests.Session()
+        s.headers.update({
+            "User-Agent": ua or (
+                "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
+                "(KHTML, like Gecko) Chrome/124.0 Safari/537.36"
+            ),
+            "Accept-Language": "ru-RU,ru",
+        })
+        proxies = self.get_proxies()
+        if proxies:
+            s.proxies.update(proxies)
+        return s
+
     # --- общие хелперы для парсеров ---
 
     @staticmethod

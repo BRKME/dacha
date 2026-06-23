@@ -27,8 +27,7 @@ class Source(BaseSource):
     name = "sberbank_ast"
 
     def fetch(self) -> SourceResult:
-        s = requests.Session()
-        s.headers.update({"User-Agent": UA, "Accept-Language": "ru-RU,ru"})
+        s = self.session(UA)
         try:
             # 1) пробуем POST-API (если путь верный — отдаст JSON со списком лотов)
             resp = s.post(
