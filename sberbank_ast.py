@@ -39,7 +39,7 @@ class Source(BaseSource):
                     "filter": {"text": "земельный участок Ленинградская область"},
                     "page": 1, "pageSize": 50,
                 }),
-                timeout=25,
+                timeout=12,
             )
             self.debug_dump(self.name + "_api", resp.text)
             if resp.status_code == 200 and resp.headers.get(
@@ -52,7 +52,7 @@ class Source(BaseSource):
 
         # 2) фолбэк: снять HTML страницы для дампа (анализ структуры)
         try:
-            page = s.get(PAGE_URL, timeout=25)
+            page = s.get(PAGE_URL, timeout=12)
             self.debug_dump(self.name + "_page", page.text)
             if page.status_code in (403, 429):
                 return SourceResult(self.name, SourceStatus.BLOCKED,
