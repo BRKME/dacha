@@ -13,7 +13,7 @@ import os
 
 import requests
 
-from .base import BaseSource, Listing, SourceResult, SourceStatus
+from base import BaseSource, Listing, SourceResult, SourceStatus
 
 API_URL = "https://api.cian.ru/search-offers/v2/search-offers-desktop/"
 
