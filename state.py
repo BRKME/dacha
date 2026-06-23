@@ -13,9 +13,9 @@ import json
 from datetime import datetime, timezone
 from pathlib import Path
 
-from sources.base import Listing
+from base import Listing
 
-STATE_DIR = Path(__file__).resolve().parent.parent / "state"
+STATE_DIR = Path(__file__).resolve().parent / "state"
 SEEN_PATH = STATE_DIR / "seen.json"
 SNAPSHOT_PATH = STATE_DIR / "listings.json"
 
