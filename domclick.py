@@ -43,6 +43,7 @@ class Source(BaseSource):
                 },
                 timeout=25,
             )
+            self.debug_dump(self.name, resp.text)
             if resp.status_code in (403, 429):
                 return SourceResult(self.name, SourceStatus.BLOCKED,
                                     message=f"HTTP {resp.status_code}")
