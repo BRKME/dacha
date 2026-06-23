@@ -1,46 +1,133 @@
-name: land_radar scan
+#!/usr/bin/env python3
+"""land_radar — оркестратор прогона.
 
-on:
-  schedule:
-    # каждые 6 часов. Actions нередко стартует с задержкой — это ок для мониторинга.
-    - cron: "0 */6 * * *"
-  workflow_dispatch: {}
+Поток: источники → нормализация → гео-дистанция → OSM-природа → LLM-обогащение
+→ жёсткий фильтр → скоринг → дедуп/снижение цены → Telegram → сохранение стейта.
 
-permissions:
-  contents: write          # для коммита обновлённого state/
+Запуск: python scan.py   (читает config.yaml рядом)
+Секреты через env: TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID, XAI_API_KEY (и т.д.)
+"""
+from __future__ import annotations
 
-jobs:
-  scan:
-    runs-on: ubuntu-latest
-    concurrency:
-      group: land-radar
-      cancel-in-progress: false
-    steps:
-      - uses: actions/checkout@v4
+import importlib
+import time
+from pathlib import Path
 
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.12"
-          cache: pip
+import yaml
 
-      - run: pip install -r requirements.txt
+import enrich, filters, geo, notify, state
+from base import SourceResult, SourceStatus
 
-      - name: Run scan
-        env:
-          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
-          TELEGRAM_CHAT_ID:   ${{ secrets.TELEGRAM_CHAT_ID }}
-          XAI_API_KEY:        ${{ secrets.XAI_API_KEY }}
-          DACHA_DEBUG: "1"    # дамп сырого HTML в debug/; поставь "" когда селекторы устаканятся
-          # Phase 2 (если появятся прокси):
-          AVITO_PROXY_URL:    ${{ secrets.AVITO_PROXY_URL }}
-          CIAN_PROXY_URL:     ${{ secrets.CIAN_PROXY_URL }}
-        run: python scan.py
+CFG_PATH = Path(__file__).resolve().parent / "config.yaml"
 
-      - name: Commit state
-        run: |
-          git config user.name  "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add state/
-          [ -d debug ] && git add debug/ || true
-          git diff --staged --quiet || git commit -m "state: scan $(date -u +%FT%TZ)"
-          git push
+
+def load_sources(cfg: dict, only: str | None = None):
+    """Инстанцирует включённые источники. only=NAME — форсит один источник
+    (даже если он выключен в конфиге), удобно для отладки селекторов."""
+    active = []
+    for name, enabled in cfg["sources"].items():
+        if only:
+            if name != only:
+                continue
+        elif not enabled:
+            continue
+        mod = importlib.import_module(name)
+        active.append(mod.Source(cfg))
+    if only and not active:
+        raise SystemExit(f"источник '{only}' не найден в config.sources")
+    return active
+
+
+def collect(sources, cfg) -> tuple[list, list[SourceResult]]:
+    listings, results = [], []
+    for src in sources:
+        print(f"[scan] fetch {src.name} ...")
+        try:
+            res = src.fetch()
+        except Exception as e:  # noqa: BLE001 — один источник не должен ронять прогон
+            res = SourceResult(src.name, SourceStatus.ERROR,
+                               message=f"{type(e).__name__}: {e}")
+        results.append(res)
+        print(f"       {res.status.value} ({len(res.listings)}) {res.message}")
+        if res.status == SourceStatus.OK:
+            listings.extend(res.listings)
+    return listings, results
+
+
+def geo_enrich(listings, cfg):
+    a = cfg["anchor"]
+    osm = cfg.get("osm_nature", {})
+    for lst in listings:
+        if lst.lat is not None and lst.lon is not None:
+            lst.distance_km = round(
+                geo.haversine_km(a["lat"], a["lon"], lst.lat, lst.lon), 1)
+            if osm.get("enabled"):
+                forest, water, wname = geo.osm_nature(
+                    lst.lat, lst.lon, osm.get("radius_m", 1500))
+                if forest is not None:
+                    lst.has_pine = lst.has_pine or forest
+                if water is not None:
+                    lst.has_water = lst.has_water or water
+                if wname and not lst.water_name:
+                    lst.water_name = wname
+                    lst.notes.append(f"OSM: вода рядом — {wname}")
+                time.sleep(1)  # вежливо к Overpass
+
+
+def parse_args():
+    import argparse
+    p = argparse.ArgumentParser(description="land_radar — монитор участков")
+    p.add_argument("--source", metavar="NAME",
+                   help="прогнать только один источник (для отладки селекторов)")
+    p.add_argument("--dry-run", action="store_true",
+                   help="не слать в Telegram и не писать стейт")
+    p.add_argument("--no-enrich", action="store_true", help="без LLM-обогащения")
+    p.add_argument("--no-osm", action="store_true", help="без проверки OSM-природы")
+    p.add_argument("--raw", action="store_true",
+                   help="печатать все собранные лоты ДО жёсткого фильтра")
+    return p.parse_args()
+
+
+def main():
+    args = parse_args()
+    cfg = yaml.safe_load(CFG_PATH.read_text("utf-8"))
+    if args.no_enrich:
+        cfg["enrich"]["enabled"] = False
+    if args.no_osm:
+        cfg["osm_nature"]["enabled"] = False
+
+    sources = load_sources(cfg, only=args.source)
+    raw, results = collect(sources, cfg)
+    print(f"[scan] собрано лотов до фильтра: {len(raw)}")
+    if args.raw:
+        for l in raw:
+            print(f"   · {l.source} {l.price_rub} {l.area_sot} {l.title[:60]} {l.url}")
+
+    geo_enrich(raw, cfg)
+    enrich.enrich(raw, cfg)
+
+    kept = []
+    for lst in raw:
+        ok, reason = filters.passes_hard(lst, cfg["hard"])
+        if not ok:
+            continue
+        filters.score_listing(lst, cfg["soft"])
+        kept.append(lst)
+    print(f"[scan] прошло жёсткий фильтр: {len(kept)}")
+
+    seen = state.load_seen()
+    new, drops = state.classify(kept, seen)
+    print(f"[scan] новых: {len(new)}, подешевело: {len(drops)}")
+
+    msg = notify.build_message(new, drops, results)
+    if args.dry_run:
+        print("\n[dry-run] сообщение НЕ отправлено, стейт НЕ записан:\n")
+        print(msg)
+    else:
+        notify.send(msg)
+        state.save(seen, kept)
+    print("[scan] done.")
+
+
+if __name__ == "__main__":
+    main()
