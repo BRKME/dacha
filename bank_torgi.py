@@ -38,6 +38,7 @@ class Source(BaseSource):
                         "price_to": self.cfg["hard"]["max_price_rub"]},
                 timeout=25,
             )
+            self.debug_dump(self.name, resp.text)
             if resp.status_code in (403, 429):
                 return SourceResult(self.name, SourceStatus.BLOCKED,
                                     message=f"HTTP {resp.status_code}")
@@ -46,27 +47,55 @@ class Source(BaseSource):
             return SourceResult(self.name, SourceStatus.ERROR, message=str(e))
         return SourceResult(self.name, SourceStatus.OK, listings=listings)
 
+    # анкоры/ссылки, которые точно НЕ лоты (кнопки, навигация, главная)
+    _JUNK_ANCHORS = {"сбросить", "показать", "найти", "участок", "ещё", "еще",
+                     "далее", "назад", "фильтр", "сортировка", "войти"}
+
+    def _is_junk(self, url: str, anchor: str) -> bool:
+        a = anchor.strip().lower()
+        if a in self._JUNK_ANCHORS:
+            return True
+        if not url or url in ("/", "#"):
+            return True
+        # ссылка на главную или на саму страницу поиска — не лот
+        if url.rstrip("/").endswith("lot-online.ru"):
+            return True
+        if "products.search" in url or "dispatch=" in url and "product_id" not in url:
+            return True
+        return False
+
     def _parse(self, html_text: str) -> list[Listing]:
         from bs4 import BeautifulSoup
         soup = BeautifulSoup(html_text, "html.parser")
         out: list[Listing] = []
+        seen_urls: set[str] = set()
         for c in soup.select("[class*='product'], [class*='lot'], article"):
             link = c.find("a", href=True)
             if not link:
+                continue
+            url = link["href"]
+            anchor = link.get_text(strip=True)
+            if self._is_junk(url, anchor):
                 continue
             text = c.get_text(" ", strip=True)
             price = self.parse_price(text)
             if price is None:
                 continue
-            url = link["href"]
             if url.startswith("/"):
                 url = "https://catalog.lot-online.ru" + url
+            if url in seen_urls:
+                continue
+            seen_urls.add(url)
+            # лот должен иметь либо площадь, либо осмысленный заголовок
+            area = self.parse_area_sot(text)
+            if area is None and len(anchor) < 15:
+                continue
             out.append(Listing(
                 source=self.name,
                 url=url,
-                title=link.get_text(strip=True)[:120],
+                title=anchor[:120],
                 price_rub=price,
-                area_sot=self.parse_area_sot(text),
+                area_sot=area,
                 land_status=self.detect_land_status(text),
                 description=text[:800],
             ))
