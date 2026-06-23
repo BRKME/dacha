@@ -42,7 +42,11 @@ def collect(sources, cfg) -> tuple[list, list[SourceResult]]:
     listings, results = [], []
     for src in sources:
         print(f"[scan] fetch {src.name} ...")
-        res = src.fetch()
+        try:
+            res = src.fetch()
+        except Exception as e:  # noqa: BLE001 — один источник не должен ронять прогон
+            res = SourceResult(src.name, SourceStatus.ERROR,
+                               message=f"{type(e).__name__}: {e}")
         results.append(res)
         print(f"       {res.status.value} ({len(res.listings)}) {res.message}")
         if res.status == SourceStatus.OK:
