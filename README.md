@@ -27,18 +27,20 @@
 
 | Источник | Реалистичность с Actions-IP | Статус |
 |----------|------------------------------|--------|
-| `mirkvartir`  | средне-высокая (лёгкая защита) | ✅ вкл |
-| `bank_torgi`  | средняя (открытые реестры — РАД/lot-online, torgi.gov.ru) | ✅ вкл |
-| `yandex`      | переменная (SmartCaptcha) | ✅ вкл |
-| `domclick`    | переменная (JSON-API, баны datacenter-IP) | ✅ вкл |
-| `avito`       | низкая (жёсткий анти-бот) | ⏸ Phase 2, нужен прокси |
-| `cian`        | низкая (Qrator) | ⏸ Phase 2, нужен прокси |
+| `mirkvartir`   | средне-высокая | ✅ вкл |
+| `bank_torgi`   | средняя (lot-online / РАД) | ✅ вкл |
+| `m_ets`        | средняя (МЭТС, банкротство) — scaffold | ✅ вкл |
+| `alfalot`      | средняя (агрегатор банкротных лотов) — scaffold | ✅ вкл |
+| `sberbank_ast` | низкая (SPA + POST-API, robots-запрет, таймаутит с Actions) | ✅ вкл |
+| `yandex`       | переменная (SmartCaptcha) | ✅ вкл |
+| `domclick`     | переменная (JSON-API, баны datacenter-IP) | ✅ вкл |
+| `avito`        | **основной по задаче**, но с Actions блокируется — нужен РФ-прокси/curl_cffi | ⏸ путь не выбран |
+| `cian`         | низкая (Qrator) | ⏸ Phase 2, прокси |
 
-> **Важно:** HTML-селекторы в `mirkvartir`/`yandex`/`bank_torgi` и параметры
-> API в `domclick`/`cian` — это рабочий каркас, не проверенный против живой
-> разметки из закрытой сети, где собирался проект. На первом прогоне сверь
-> вывод с реальными страницами и поправь селекторы. Если источник внезапно
-> отдаёт 0 лотов со статусом 🟢 — почти наверняка поехали селекторы.
+> Парсеры площадок — рабочий каркас. При `DACHA_DEBUG=1` каждый источник
+> сохраняет сырой ответ в `debug/<name>.html` и коммитит его — по этим дампам
+> селекторы правятся под живую разметку. Источник 🟢 с 0 лотов = селекторы
+> не совпали (смотри дамп), не ошибка инфраструктуры.
 
 ## Phase 2: Авито / Циан
 
@@ -46,23 +48,23 @@
 рабочего РФ residential-прокси в секретах `AVITO_PROXY_URL` / `CIAN_PROXY_URL`.
 Без прокси оба источника честно рапортуют BLOCKED и прогон не ломают.
 
-## Структура
+## Структура (плоская — всё в корне)
 
 ```
-land_radar/
-├── scan.py               # оркестратор
-├── config.yaml           # все критерии и флаги
-├── sources/              # по модулю на площадку (общий интерфейс BaseSource)
-│   ├── base.py           #   Listing + SourceResult + парс-хелперы
-│   ├── mirkvartir.py  yandex.py  domclick.py  bank_torgi.py
-│   └── avito.py  cian.py
-├── core/
-│   ├── geo.py            # haversine + OSM Overpass
-│   ├── filters.py        # жёсткий отсев + скоринг
-│   ├── enrich.py         # LLM-разбор описаний (Grok/Claude/OpenAI)
-│   ├── state.py          # JSON дедуп + детект снижения цены
-│   └── notify.py         # Telegram HTML
-└── state/                # seen.json + listings.json (коммитятся ботом)
+dacha/
+├── scan.py               # оркестратор (CLI: --source --dry-run --no-enrich --no-osm --raw)
+├── config.yaml           # все критерии и флаги источников
+├── base.py               # Listing + SourceResult + парс-хелперы + debug_dump
+├── geo.py                # haversine + OSM Overpass
+├── filters.py            # жёсткий отсев + скоринг
+├── enrich.py             # LLM-разбор описаний (Grok 4.3 / Claude / OpenAI)
+├── state.py              # JSON дедуп + детект снижения цены
+├── notify.py             # Telegram HTML
+├── mirkvartir.py yandex.py domclick.py            # риелторские площадки
+├── bank_torgi.py m_ets.py alfalot.py sberbank_ast.py   # торги/банкротство
+├── avito.py cian.py      # Phase 2 (нужен РФ-прокси)
+├── test_core.py          # pytest (12 тестов)
+└── .github/workflows/scan.yml
 ```
 
 ## Секреты (Settings → Secrets → Actions)
