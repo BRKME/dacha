@@ -9,7 +9,7 @@ from __future__ import annotations
 
 from datetime import datetime, timezone
 
-from sources.base import Listing
+from base import Listing
 
 
 def _has_any(text: str, keywords) -> bool:
