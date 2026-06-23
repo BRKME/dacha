@@ -45,18 +45,21 @@ locations:
 
 # Включённые источники. false → источник пропускается.
 sources:
-  mirkvartir:  true
-  bank_torgi:  true
-  yandex:      true
-  domclick:    true
-  avito:       false   # Phase 2: нужен РФ residential-прокси
-  cian:        false   # Phase 2: нужен РФ residential-прокси
+  mirkvartir:   true
+  bank_torgi:   true    # lot-online / РАД
+  m_ets:        true    # МЭТС — банкротные торги
+  alfalot:      true    # Alfalot — агрегатор банкротных лотов
+  sberbank_ast: true    # Сбербанк-АСТ, раздел Bankruptcy (SPA, нужен POST-API)
+  yandex:       true
+  domclick:     true
+  avito:        false   # основной по задаче, но нужен РФ-прокси/curl_cffi — путь не выбран
+  cian:         false   # Phase 2: нужен РФ residential-прокси
 
 # Обогащение описаний через LLM (xAI Grok по умолчанию)
 enrich:
   enabled: true
   provider: "grok"     # grok | claude | openai
-  model: "grok-2-latest"
+  model: "grok-4.3"      # актуальная модель xAI (grok-2-latest ретайрнут)
   max_listings_per_run: 25   # лимит, чтобы не жечь токены
 
 # Проверка природы по OpenStreetMap (Overpass) — лес/вода рядом по координатам
