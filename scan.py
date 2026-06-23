@@ -15,8 +15,8 @@ from pathlib import Path
 
 import yaml
 
-from core import enrich, filters, geo, notify, state
-from sources.base import SourceResult, SourceStatus
+import enrich, filters, geo, notify, state
+from base import SourceResult, SourceStatus
 
 CFG_PATH = Path(__file__).resolve().parent / "config.yaml"
 
@@ -31,7 +31,7 @@ def load_sources(cfg: dict, only: str | None = None):
                 continue
         elif not enabled:
             continue
-        mod = importlib.import_module(f"sources.{name}")
+        mod = importlib.import_module(name)
         active.append(mod.Source(cfg))
     if only and not active:
         raise SystemExit(f"источник '{only}' не найден в config.sources")
