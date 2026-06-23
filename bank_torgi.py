@@ -14,7 +14,7 @@ from __future__ import annotations
 
 import requests
 
-from .base import BaseSource, Listing, SourceResult, SourceStatus
+from base import BaseSource, Listing, SourceResult, SourceStatus
 
 UA = ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
       "(KHTML, like Gecko) Chrome/124.0 Safari/537.36")
