@@ -34,11 +34,12 @@ class Source(BaseSource):
 
         queries = self.cfg["locations"]["primary"]
         try:
-            for q in queries:
+            for i, q in enumerate(queries):
                 url = SEARCH_URL + "?" + urllib.parse.urlencode(
                     {"q": q, "pricemax": max_price}
                 )
                 resp = session.get(url, timeout=25)
+                self.debug_dump(f"{self.name}_{i}", resp.text)
                 if resp.status_code in (403, 429) or "captcha" in resp.text.lower():
                     return SourceResult(self.name, SourceStatus.BLOCKED,
                                         message=f"HTTP {resp.status_code}/captcha")
