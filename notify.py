@@ -10,7 +10,7 @@ import os
 
 import requests
 
-from sources.base import Listing, SourceResult, SourceStatus
+from base import Listing, SourceResult, SourceStatus
 
 TG_API = "https://api.telegram.org/bot{token}/sendMessage"
 
