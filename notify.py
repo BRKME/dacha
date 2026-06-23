@@ -1,64 +1,85 @@
-"""Стейт в committed JSON (паттерн BRKME — без БД).
+"""Формирование и отправка Telegram-сообщения (HTML parse_mode).
 
-state/seen.json   — {uid: {price, first_seen, last_seen}} для дедупа и
-                    отслеживания снижения цены.
-state/listings.json — последний полный снапшот прошедших фильтр лотов
-                    (для дебага/истории).
-
-classify() делит лоты на новые / подешевевшие / уже виденные.
+Сообщение содержит: новые лоты, снижения цены и строку статусов
+источников (какие площадки отдали данные, какие заблокированы).
 """
 from __future__ import annotations
 
-import json
-from datetime import datetime, timezone
-from pathlib import Path
+import html
+import os
 
-from base import Listing
+import requests
 
-STATE_DIR = Path(__file__).resolve().parent / "state"
-SEEN_PATH = STATE_DIR / "seen.json"
-SNAPSHOT_PATH = STATE_DIR / "listings.json"
+from base import Listing, SourceResult, SourceStatus
 
+TG_API = "https://api.telegram.org/bot{token}/sendMessage"
 
-def _now() -> str:
-    return datetime.now(timezone.utc).isoformat()
-
-
-def load_seen() -> dict:
-    if SEEN_PATH.exists():
-        try:
-            return json.loads(SEEN_PATH.read_text("utf-8"))
-        except json.JSONDecodeError:
-            return {}
-    return {}
+_STATUS_EMOJI = {
+    SourceStatus.OK: "🟢",
+    SourceStatus.BLOCKED: "🔴",
+    SourceStatus.ERROR: "🟠",
+    SourceStatus.SKIPPED: "⚪",
+}
 
 
-def classify(listings: list[Listing], seen: dict):
-    """-> (new, price_drops). Мутирует seen (обновляет last_seen/price)."""
-    new, drops = [], []
-    for lst in listings:
-        uid = lst.uid
-        rec = seen.get(uid)
-        if rec is None:
-            seen[uid] = {
-                "price": lst.price_rub,
-                "first_seen": _now(),
-                "last_seen": _now(),
-            }
-            new.append(lst)
-        else:
-            old_price = rec.get("price")
-            if (lst.price_rub is not None and old_price is not None
-                    and lst.price_rub < old_price):
-                lst.notes.append(f"цена ↓ {old_price:,}→{lst.price_rub:,}₽")
-                drops.append(lst)
-            rec["last_seen"] = _now()
-            rec["price"] = lst.price_rub
-    return new, drops
+def _fmt_listing(lst: Listing) -> str:
+    price = f"{lst.price_rub:,}₽".replace(",", " ") if lst.price_rub else "цена н/д"
+    area = f"{lst.area_sot:g} сот" if lst.area_sot else "площадь н/д"
+    dist = f"{lst.distance_km:.1f} км" if lst.distance_km is not None else "? км"
+    pine = "🌲" if lst.has_pine else ""
+    water = "💧" if lst.has_water else ""
+    status = f" · {lst.land_status}" if lst.land_status else ""
+    title = html.escape(lst.title or lst.address or "участок")[:80]
+
+    line = (f"<b>{price}</b> · {area} · {dist}{status} {pine}{water}\n"
+            f"<a href=\"{html.escape(lst.url)}\">{title}</a> "
+            f"<i>[{lst.source}, score {lst.score}]</i>")
+    if lst.water_name:
+        line += f"\n   💧 {html.escape(lst.water_name)}"
+    if lst.notes:
+        line += "\n   ⚠️ " + "; ".join(html.escape(n) for n in lst.notes)
+    return line
 
 
-def save(seen: dict, listings: list[Listing]):
-    STATE_DIR.mkdir(exist_ok=True)
-    SEEN_PATH.write_text(json.dumps(seen, ensure_ascii=False, indent=2), "utf-8")
-    snap = [l.to_dict() for l in sorted(listings, key=lambda x: -x.score)]
-    SNAPSHOT_PATH.write_text(json.dumps(snap, ensure_ascii=False, indent=2), "utf-8")
+def build_message(new: list[Listing], drops: list[Listing],
+                  results: list[SourceResult]) -> str:
+    parts = ["🏞 <b>land_radar — участки под Белоостровом</b>"]
+
+    if new:
+        parts.append(f"\n<b>🆕 Новые ({len(new)})</b>")
+        for lst in sorted(new, key=lambda x: -x.score)[:15]:
+            parts.append(_fmt_listing(lst))
+    if drops:
+        parts.append(f"\n<b>📉 Подешевели ({len(drops)})</b>")
+        for lst in sorted(drops, key=lambda x: -x.score)[:10]:
+            parts.append(_fmt_listing(lst))
+    if not new and not drops:
+        parts.append("\nНовых лотов нет.")
+
+    statuses = " ".join(
+        f"{_STATUS_EMOJI.get(r.status, '?')}{r.source}" for r in results
+    )
+    parts.append(f"\n<i>{statuses}</i>")
+    blocked = [r for r in results if r.status == SourceStatus.BLOCKED]
+    if blocked:
+        parts.append("<i>⚠️ заблокированы: "
+                     + ", ".join(r.source for r in blocked) + "</i>")
+    return "\n".join(parts)
+
+
+def send(text: str):
+    token = os.environ.get("TELEGRAM_BOT_TOKEN")
+    chat_id = os.environ.get("TELEGRAM_CHAT_ID")
+    if not token or not chat_id:
+        print("[notify] нет TELEGRAM_BOT_TOKEN/CHAT_ID — печатаю в stdout:\n")
+        print(text)
+        return
+    # Telegram лимит 4096 символов
+    for chunk_start in range(0, len(text), 4000):
+        chunk = text[chunk_start:chunk_start + 4000]
+        requests.post(
+            TG_API.format(token=token),
+            json={"chat_id": chat_id, "text": chunk,
+                  "parse_mode": "HTML", "disable_web_page_preview": True},
+            timeout=20,
+        )
