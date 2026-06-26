@@ -30,23 +30,21 @@ jobs:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID:   ${{ secrets.TELEGRAM_CHAT_ID }}
           XAI_API_KEY:        ${{ secrets.XAI_API_KEY }}
-          # Общий РФ residential-прокси для всех источников.
-          # Вариант А — цельный URL: PROXY_URL = http://login:pass@host:port
-          PROXY_URL:          ${{ secrets.PROXY_URL }}
-          # Вариант Б — по частям (ProxyMania отдаёт так; base.py соберёт URL):
-          PROXY_HOST:         ${{ secrets.PROXY_HOST }}
-          PROXY_PORT:         ${{ secrets.PROXY_PORT }}
-          PROXY_LOGIN:        ${{ secrets.PROXY_LOGIN }}
-          PROXY_PASS:         ${{ secrets.PROXY_PASS }}
-          # Source-specific (опционально, переопределяют PROXY_URL):
-          AVITO_PROXY_URL:    ${{ secrets.AVITO_PROXY_URL }}
-          CIAN_PROXY_URL:     ${{ secrets.CIAN_PROXY_URL }}
+          DACHA_DEBUG: "1"    # дамп сырого HTML в debug/; поставь "" когда селекторы устаканятся
+          # Прокси для ВСЕХ запросов: requests читает эти переменные сам,
+          # править код источников не нужно. Задаётся одним секретом.
+          HTTP_PROXY:  ${{ secrets.DACHA_PROXY_URL }}
+          HTTPS_PROXY: ${{ secrets.DACHA_PROXY_URL }}
         run: python scan.py
 
-      - name: Commit state
+      - name: Commit state & debug
         run: |
+          echo "=== содержимое debug/ после прогона ==="
+          ls -la debug/ 2>/dev/null || echo "(папки debug нет — значит DACHA_DEBUG не сработал)"
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add state/
+          git add state/ debug/ 2>/dev/null || git add state/
+          echo "=== staged ==="
+          git status --short
           git diff --staged --quiet || git commit -m "state: scan $(date -u +%FT%TZ)"
           git push
