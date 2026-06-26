@@ -82,8 +82,9 @@ class BaseSource:
     def get_proxies(source_specific_env: str = None) -> Optional[dict]:
         """Единый прокси для всех источников.
 
-        Приоритет: source-specific env (AVITO_PROXY_URL и т.п.) → общий PROXY_URL.
-        Возвращает dict для requests или None если прокси не задан.
+        Приоритет: source-specific env (AVITO_PROXY_URL и т.п.) → цельный
+        PROXY_URL → сборка из частей (PROXY_HOST/PORT/LOGIN/PASS — формат
+        ProxyMania). Возвращает dict для requests или None если прокси не задан.
         """
         import os
         url = None
@@ -91,6 +92,15 @@ class BaseSource:
             url = os.environ.get(source_specific_env)
         if not url:
             url = os.environ.get("PROXY_URL")
+        if not url:
+            # сборка из отдельных секретов (ProxyMania отдаёт их по частям)
+            host = os.environ.get("PROXY_HOST")
+            port = os.environ.get("PROXY_PORT")
+            login = os.environ.get("PROXY_LOGIN")
+            pwd = os.environ.get("PROXY_PASS")
+            if host and port:
+                auth = f"{login}:{pwd}@" if login and pwd else ""
+                url = f"http://{auth}{host}:{port}"
         if not url:
             return None
         return {"http": url, "https": url}
@@ -178,3 +188,28 @@ class BaseSource:
         d = Path(__file__).resolve().parent / "debug"
         d.mkdir(exist_ok=True)
         (d / f"{name}.html").write_text((text or "")[:800_000], encoding="utf-8")
+
+    @staticmethod
+    def check_proxy() -> dict:
+        """Проверка прокси: жив ли и какой IP/страну отдаёт.
+
+        Возвращает {ok, ip, country, error}. Без прокси — ok=False с пометкой.
+        Запускать вручную (workflow_dispatch) для проверки, что секреты
+        ProxyMania заданы верно и трафик идёт через RU-выход.
+        """
+        import requests
+        proxies = BaseSource.get_proxies()
+        if not proxies:
+            return {"ok": False, "ip": None, "country": None,
+                    "error": "прокси не задан (нет PROXY_URL/PROXY_HOST...)"}
+        try:
+            r = requests.get("https://ipinfo.io/json", proxies=proxies, timeout=20)
+            r.raise_for_status()
+            d = r.json()
+            country = d.get("country")
+            return {"ok": True, "ip": d.get("ip"), "country": country,
+                    "error": None if country == "RU" else
+                    f"выход не RU, а {country} — проверь гео списка"}
+        except Exception as e:  # noqa: BLE001
+            return {"ok": False, "ip": None, "country": None,
+                    "error": f"прокси не отвечает: {type(e).__name__}: {e}"}
