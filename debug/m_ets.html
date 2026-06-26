@@ -1,0 +1,2889 @@
+<!DOCTYPE html>
+<html lang="ru" >
+	<head>
+		<meta name="robots" content="noindex, nofollow" />
+ 		<title>Страница не найдена</title>
+		<meta property="og:title" content="Страница не найдена" />
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+		<script>
+			
+				if (navigator.serviceWorker) {
+					window.addEventListener('load', function() {  
+						navigator.serviceWorker.register('/sw.js').then(function(registration) {
+							registration.addEventListener('updatefound', function() {
+								let worker = registration.installing;
+								worker.addEventListener('statechange', function() {
+									if (worker.state == 'installed') {
+										worker.postMessage({action: 'skipWaiting'});
+									}
+								});
+							});
+							console.log('ServiceWorker registration successful with scope: ', registration.scope);
+						},
+						function(err) {
+						console.log('ServiceWorker registration failed: ', err);
+						});
+
+						var refreshing;
+						navigator.serviceWorker.addEventListener('controllerchange', function () {
+							if (refreshing) return
+							window.location.reload();
+							refreshing = true
+						});
+					});
+				}
+		
+		</script>
+		<script>
+
+			var isAuth = false;
+			var useGosKey = false;
+			var useMapTextSearch = false;
+			//id для автовыбора сертификата который был выбран ранее
+			var auth_user_id = null;
+			var jslog = false;
+			var jsloghash = "373cff356365be78766b05d0f920c5ab";
+			
+			
+			var tab = null;
+			const SConf = {
+				"yandex_api_key" : '787c238a-a108-472b-bba3-3e87686cc5b4',
+				"isStage": 'false' === "true",
+			};
+			const sid = 'fa7d45e30dc8a6fd0c345aecef9adf50';
+			var tid;
+			var jsDate = "1782513550431";
+			var isSearch = true;
+			var baseUrl = '';
+			const CURRENT_YEAR = Number('2026');
+			var version = 79;
+			var test_platform = false;
+			var categories = {"deb":["24","25","26","29"],"efrsb_map":{"22":["0104015","0104023","99"],"23":["99","0104023"],"24":["0301"],"25":["0301"],"26":["0301"],"27":["99","0104023"],"28":["0101015"],"29":["0302"],"30":["99"],"11":["0108001"],"12":["0106013"],"34":["0101016"],"14":["0108001","0101005","0106013"],"36":["0101016"],"15":["0104015","0104023"],"37":["0101015"],"16":["0104019","0104023"],"38":["0101015"],"17":["0104020","0104023"],"39":["0101015"],"18":["0104020","0104023"],"19":["0104008","0104023"],"1":["0106008"],"3":["0106013","0106011"],"4":["0106001"],"5":["0106005"],"6":["0106007"],"8":["0106013","0104023","0106004"],"40":["0108001","0101005"],"41":["99"],"20":["99","0104023"],"42":["99"],"21":["99","0104023"]},"nedvizh":["11","28","34","35","36","37","38","39","40","41"],"auto":["1","2","3","4","5","6","7","8"]};
+			
+			//todl
+			var DADATA_TOKEN = "32ca98740be9650dd085b74523d5255686765874";
+			var wsEnable = true;
+			var wsTtl = 50000;
+			var preloaderEnable = true;
+			
+						const HashConf=function(b){const _keyStr="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";const decode=function(input){var output="";var chr1,chr2,chr3;var enc1,enc2,enc3,enc4;var i=0;input=input.replace(/[^A-Za-z0-9\+\/\=]/g,"");while(i<input.length){enc1=_keyStr.indexOf(input.charAt(i++));enc2=_keyStr.indexOf(input.charAt(i++));enc3=_keyStr.indexOf(input.charAt(i++));enc4=_keyStr.indexOf(input.charAt(i++));chr1=enc1<<2|enc2>>4;chr2=(enc2&15)<<4|enc3>>2;chr3=(enc3&3)<<6|enc4;output=output+String.fromCharCode(chr1);if(enc3!==64){output=output+String.fromCharCode(chr2)}if(enc4!==64){output=output+String.fromCharCode(chr3)}}output=_utf8_decode(output);return output};const _utf8_decode=function(utftext){var string="";var i=0;var c=c1=c2=0;while(i<utftext.length){c=utftext.charCodeAt(i);if(c<128){string+=String.fromCharCode(c);i++}else if(c>191&&c<224){c2=utftext.charCodeAt(i+1);string+=String.fromCharCode((c&31)<<6|c2&63);i+=2}else{c2=utftext.charCodeAt(i+1);c3=utftext.charCodeAt(i+2);string+=String.fromCharCode((c&15)<<12|(c2&63)<<6|c3&63);i+=3}}return string};const _=this;const data=JSON.parse(decode(b));_.get=function(n){return data[n]};_.getUserSettings=function(n){return data.userSettings?data.userSettings[n]:null}};
+			const Conf = new HashConf('eyJnb3NrZXlfZXhwaXJlX21pbnV0ZXMiOiIxNSIsIm1hcF9tYXhfcG9seWdvbnNfYmFua3IiOjUwLCJkYWRhdGFfdG9rZW4iOiIzMmNhOTg3NDBiZTk2NTBkZDA4NWI3NDUyM2Q1MjU1Njg2NzY1ODc0IiwiZ29za2V5X3BhY2thZ2VfbWF4X3NpemUiOiIiLCJzdmVyIjoiNzkiLCJpc1N0YWdlIjpmYWxzZSwic2hvd1R5cGUzIjpmYWxzZSwic2hvd1R5cGU0Ijp0cnVlLCJzaG93VHlwZTYiOnRydWUsImdvc2tleV9hbGxvd2VkX2ZpbGVfY2hhcnNfcGF0dGVybiI6IlteYS16QS1a0LAt0Y/QkC3RjzAtOSPihJbRkdCBJy4oKSBfLV0iLCJjaWFuX29yZ19lZGl0X2FsbG93IjpmYWxzZSwibG90X3RpdGxlX21heF9zaXplIjoiMTIwIiwia2luZXNjb3BlX3ZpZGVvX2VuYWJsZWQiOnRydWUsImdvc2tleV9hbGxvd2VkX2V4dF9mb3JfY2hhbmdlIjoicG5nLGhlaWMsZG9jLGRvY3gsemlwLHhscyx4bHN4LHNpZyxwN3Msc2duLFpJUCIsInNob3dUeXBlOCI6dHJ1ZSwic2hvd1R5cGU5Ijp0cnVlLCJwcmVsb2FkZXJfZW5hYmxlZCI6dHJ1ZSwia2luZXNjb3BlX21heF92aWRlb19zaXplIjoiNTAwIiwid3NfdHRsIjo1MDAwMCwieWFuZGV4X2FwaV9rZXkiOiI3ODdjMjM4YS1hMTA4LTQ3MmItYmJhMy0zZTg3Njg2Y2M1YjQiLCJnb3NrZXlfYWxsb3dlZF9leHQiOiJqcGcscGRmLHR4dCxwbmcsaGVpYyxkb2MsZG9jeCx6aXAseGxzLHhsc3gsc2lnLHA3cyxzZ24sWklQLGpwZWcsSlBHLFBERiIsIndzX2VuYWJsZWQiOnRydWUsImZpeGVkX2RvZ196YWRhdCI6dHJ1ZSwibWFwX21heF9wb2x5Z29uc19jb21tIjo1MH0=');
+			const webConf = new HashConf('eyJnb3NrZXlfZXhwaXJlX21pbnV0ZXMiOiIxNSIsIm1hcF9tYXhfcG9seWdvbnNfYmFua3IiOjUwLCJkYWRhdGFfdG9rZW4iOiIzMmNhOTg3NDBiZTk2NTBkZDA4NWI3NDUyM2Q1MjU1Njg2NzY1ODc0IiwiZ29za2V5X3BhY2thZ2VfbWF4X3NpemUiOiIiLCJzdmVyIjoiNzkiLCJpc1N0YWdlIjpmYWxzZSwic2hvd1R5cGUzIjpmYWxzZSwic2hvd1R5cGU0Ijp0cnVlLCJzaG93VHlwZTYiOnRydWUsImdvc2tleV9hbGxvd2VkX2ZpbGVfY2hhcnNfcGF0dGVybiI6IlteYS16QS1a0LAt0Y/QkC3RjzAtOSPihJbRkdCBJy4oKSBfLV0iLCJjaWFuX29yZ19lZGl0X2FsbG93IjpmYWxzZSwibG90X3RpdGxlX21heF9zaXplIjoiMTIwIiwia2luZXNjb3BlX3ZpZGVvX2VuYWJsZWQiOnRydWUsImdvc2tleV9hbGxvd2VkX2V4dF9mb3JfY2hhbmdlIjoicG5nLGhlaWMsZG9jLGRvY3gsemlwLHhscyx4bHN4LHNpZyxwN3Msc2duLFpJUCIsInNob3dUeXBlOCI6dHJ1ZSwic2hvd1R5cGU5Ijp0cnVlLCJwcmVsb2FkZXJfZW5hYmxlZCI6dHJ1ZSwia2luZXNjb3BlX21heF92aWRlb19zaXplIjoiNTAwIiwid3NfdHRsIjo1MDAwMCwieWFuZGV4X2FwaV9rZXkiOiI3ODdjMjM4YS1hMTA4LTQ3MmItYmJhMy0zZTg3Njg2Y2M1YjQiLCJnb3NrZXlfYWxsb3dlZF9leHQiOiJqcGcscGRmLHR4dCxwbmcsaGVpYyxkb2MsZG9jeCx6aXAseGxzLHhsc3gsc2lnLHA3cyxzZ24sWklQLGpwZWcsSlBHLFBERiIsIndzX2VuYWJsZWQiOnRydWUsImZpeGVkX2RvZ196YWRhdCI6dHJ1ZSwibWFwX21heF9wb2x5Z29uc19jb21tIjo1MH0=');
+			const Auth = new HashConf('e30=');
+			
+			document.addEventListener("DOMContentLoaded", function(){
+				
+				
+				document.querySelectorAll("[rel=preload][type='text/css']").forEach(function(el, idx){
+					el.onload = null;
+					el.rel = "stylesheet";
+					
+				});
+				alive();
+				
+				var standalone = window.navigator.standalone, userAgent = window.navigator.userAgent.toLowerCase(), safari = /safari/.test( userAgent ), ios = /macintosh|iphone|ipod|ipad/.test( userAgent );
+				if (ios && !standalone && !safari) {
+					$(".no-ios-app").remove();
+				}
+				if (!ios) {
+					$('.ios-app-only').remove();
+				}
+				$("select[readonly]").on("keydown", function(e){
+					e.preventDefault();
+					return false;
+				});
+				
+						});
+			function mobileMenuToggle(){
+				jQuery("body").toggleClass("show-mobule-menu");
+			}
+			function errorPageClick(){
+				var error_where =jQuery('[name=error_where]').val();
+				var error_page=jQuery('#error_page').val();
+				jQuery.ajax({
+					url: '/ajax/reportError?act=save_report',
+					type: 'post',
+					data:{error_where:error_where,error_page:error_page},
+					dataType: 'json',
+					success: function (response) {
+						if(!response) {
+							aAlert("Произошла ошибка");
+							return;
+						}
+						
+						if (response.success) {
+							$("#modalDialog .modal-pure__infopart").html("Заявка принята");
+							$(".modal-pure.active").removeClass("active");
+							aAlert(response.msg);
+						} else {
+							aAlert(response.msg)
+								.then(() => $('#error_page').focus());
+						}
+					},
+					error: function (jqXHR) {
+						aAlert("Ошибка отправки данных.",jqXHR.status)
+							.then(() => $('#error_page').focus());
+					}
+				});
+			}
+			
+						if(test_platform){
+				var showDebugConsoleLog = false;	
+			}
+		</script>
+				<meta name="format-detection" content="telephone=no" />
+		<meta http-equiv="x-rim-auto-match" content="none" />
+
+		
+				<link rel="stylesheet" type="text/css" href="/css/blue/style.css?v=79" />
+
+				 			<script src="/bundle/main-c39f46cef1.js"></script>
+  				
+		<script src="/js/communicatorWS.js?v=79"></script>		
+		
+				<meta name="viewport" content="width=device-width, initial-scale=1" />
+		
+		<meta name="color-scheme" content="only light">
+
+		<link rel='manifest' href='/PWA/manifest.json' />	
+		<meta property="og:url" content="https://m-ets.ru/trade/" />
+		
+		
+		<meta property="og:type" content="website"/>
+
+		<link rel="search" type="application/opensearchdescription+xml" title="МЭТС" href="/opensearch.xml" />
+
+
+		<meta name="application-name" content="МЭТС"/>
+
+		<meta name="theme-color" content="#FFFFFF"/>
+
+		<meta name="mobile-web-app-capable" content="yes"/>
+
+		<link rel="manifest" href="/icons/blue/site.webmanifest?v=79">
+
+		<meta name="apple-mobile-web-app-capable" content="yes"/>
+		<meta name="apple-mobile-web-app-title" content="МЭТС"/>
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+
+
+		<!-- Обязательный (и достаточный) тег для браузеров -->
+		<link type="image/x-icon" rel="shortcut icon" href="/favicon.ico?v=79"/>
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg?v=79"/>
+
+		<!-- Дополнительные иконки для десктопных браузеров -->
+		<link type="image/png" sizes="16x16" rel="icon" href="/icons/blue/favicon-16x16.png?v=79"/>
+		<link type="image/png" sizes="32x32" rel="icon" href="/icons/blue/favicon-32x32.png?v=79"/>
+		<link type="image/png" sizes="72x72" rel="icon" href="/icons/blue/android-chrome-72x72.png?v=79"/>
+		<link type="image/png" sizes="144x144" rel="icon" href="/icons/blue/android-chrome-144x144.png?v=79"/>
+
+		<!-- Иконки для Android -->
+		<link type="image/png" sizes="36x36" rel="icon" href="/icons/blue/android-chrome-36x36.png?v=79"/>
+		<link type="image/png" sizes="72x72" rel="icon" href="/icons/blue/android-chrome-72x72.png?v=79"/>
+		<link type="image/png" sizes="96x96" rel="icon" href="/icons/blue/android-chrome-96x96.png?v=79"/>
+		<link type="image/png" sizes="144x144" rel="icon" href="/icons/blue/android-chrome-144x144.png?v=79"/>
+		<link type="image/png" sizes="192x192" rel="icon" href="/icons/blue/android-chrome-192x192.png?v=79"/>
+		<link type="image/png" sizes="256x256" rel="icon" href="/icons/blue/android-chrome-256x256.png?v=79"/>
+		<link type="image/png" sizes="512x512" rel="icon" href="/icons/blue/android-chrome-512x512.png?v=79"/>
+
+		<!-- Иконки для iOS (Apple) -->
+		<link sizes="57x57" rel="apple-touch-icon" href="/icons/blue/apple-touch-icon-57x57.png?v=79"/>
+		<link sizes="60x60" rel="apple-touch-icon" href="/icons/blue/apple-touch-icon-60x60.png?v=79"/>
+		<link sizes="72x72" rel="apple-touch-icon" href="/icons/blue/apple-touch-icon-72x72.png?v=79"/>
+		<link sizes="76x76" rel="apple-touch-icon" href="/icons/blue/apple-touch-icon-76x76.png?v=79"/>
+		<link sizes="114x114" rel="apple-touch-icon" href="/icons/blue/apple-touch-icon-114x114.png?v=79"/>
+		<link sizes="120x120" rel="apple-touch-icon" href="/icons/blue/apple-touch-icon-120x120.png?v=79"/>
+		<link sizes="144x144" rel="apple-touch-icon" href="/icons/blue/apple-touch-icon-144x144.png?v=79"/>
+		<link sizes="152x152" rel="apple-touch-icon" href="/icons/blue/apple-touch-icon-152x152.png?v=79"/>
+		<link sizes="180x180" rel="apple-touch-icon" href="/icons/blue/apple-touch-icon.png?v=79"/>
+
+		<!-- Иконки для MacOS (Apple) -->
+		<link rel="mask-icon" href="/icons/blue/safari-pinned-tab.svg?v=79" color="#0354dd">
+
+		<!-- Иконки и цвета для плиток Windows -->
+		<meta name="msapplication-TileColor" content="#2b5797"/>
+		<meta name="msapplication-TileImage" content="/icons/blue/mstile-144x144.png?v=79"/>
+		<meta name="msapplication-square70x70logo" content="/icons/blue/mstile-70x70.png?v=79"/>
+		<meta name="msapplication-square150x150logo" content="/icons/blue/mstile-150x150.png?v=79"/>
+		<meta name="msapplication-wide310x150logo" content="/icons/blue/mstile-310x310.png?v=79"/>
+		<meta name="msapplication-square310x310logo" content="/icons/blue/mstile-310x150.png?v=79"/>
+		<meta name="msapplication-config" content="/icons/blue/browserconfig.xml?v=79"/>		
+		<meta name="msapplication-navbutton-color" content="#FFFFFF"/>
+		<meta name="msapplication-starturl" content="/"/>
+
+		<meta property="og:site_name" content="m-ets.ru"/>
+
+		<meta property="og:description" content="Электронная торговая площадка «МЭТС» - одна из первых в Стране, с 2010 года начала деятельность по реализации имущества должников в рамках закона № 127-ФЗ «О несостоятельности (банкротстве)»."/>
+		<meta name="description" content="Электронная торговая площадка «МЭТС» - одна из первых в Стране, с 2010 года начала деятельность по реализации имущества должников в рамках закона № 127-ФЗ «О несостоятельности (банкротстве)»."/>
+
+		<meta property="og:image" content="/icons/blue/apple-touch-icon-120x120-precomposed.png?v=79"/>
+		<meta property="og:locale" content="ru_RU"/>		
+
+		<meta name="keywords" content="Электронная торговая система, МЭТС, Закон несостоятельности (банкротстве), 127-ФЗ, Единый федеральный реестр сведений о банкротстве, торги по банкротству, аукцион по банкротству, электронные торговые площадки, электронные торги, торги, банкротство, продажа имущества, поиск торгов, реестр торгов, электронные торги, торги должников, поиск лотов, поиск торгов, объекты недвижимости, подписка МЭТС, Регистрация МЭТС, портал МЭТС, ЭТП, задаток на торги, коммерческие торги, информация с ЕФРСБ, имущество банкротов, имущество должников, торги официальный сайт, сайт торгов РФ, сайт размещения торгов, новости торгов, государственные торги, муниципальные торги, государственный тендер, торги органов власти, сайт торгов в отношении государственного и муниципального имущества и ресурсов, "/>
+
+	</head>
+	<body class=" ">
+				
+				<style>
+			#preloader{
+				top:0;
+				bottom: 0;
+				left:0;
+				right: 0;
+				position: fixed;
+				display: block;
+				z-index: 2000;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+			}
+
+			#preloader_white{
+				top:0;
+				bottom: 0;
+				left:0;
+				right: 0;
+				background: white;
+				opacity: 0.5;
+				position: fixed;
+				display: block;
+			}
+
+			.activ_preloader{
+				display: none!important;
+			}
+			.loading__dots-inline .loading__dots-ellipsis div {
+				top: -10px;
+				width: 10px;
+				height: 10px;
+			}
+			.loading__dots-inline .loading__dots-ellipsis {
+				height: auto;
+			}
+			.loading__dots-inline {
+				display: inline-block;
+			}
+			.loading__dots-ellipsis {
+				display: inline-block;
+				position: relative;
+				width: 80px;
+				height: 80px;
+			}
+			.loading-button__dots.white{
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				font-size: 25px;
+				font-family: 'Geometria';
+				font-weight: bold;
+				z-index: 2;
+			}
+			.loading-button__dots.white .loading__dots-ellipsis{
+				height: 27px;
+				margin: 0px 27px;
+			}
+			.loading-button__dots.white .loading__dots-ellipsis div{
+				top: 7px;
+				background: linear-gradient(to bottom, #ffffff, #5b85f1);
+			}
+			.loading__dots-ellipsis div {
+				position: absolute;
+				top: 33px;
+				width: 13px;
+				height: 13px;
+				border-radius: 50%;
+				background: linear-gradient(to bottom, #5b85f1, #2c4fa1);
+				animation-timing-function: cubic-bezier(0, 1, 1, 0);
+			}
+			.loading__dots-ellipsis div:nth-child(1) {
+				left: 8px;
+				animation: loading__dots-ellipsis1 0.6s infinite;
+			}
+			.loading__dots-ellipsis div:nth-child(2) {
+				left: 8px;
+				animation: loading__dots-ellipsis2 0.6s infinite;
+			}
+			.loading__dots-ellipsis div:nth-child(3) {
+				left: 32px;
+				animation: loading__dots-ellipsis2 0.6s infinite;
+			}
+			.loading__dots-ellipsis div:nth-child(4) {
+				left: 56px;
+				animation: loading__dots-ellipsis3 0.6s infinite;
+			}
+			@keyframes loading__dots-ellipsis1 {
+				0% {
+					transform: scale(0);
+				}
+				100% {
+					transform: scale(1);
+				}
+			}
+			@keyframes loading__dots-ellipsis3 {
+				0% {
+					transform: scale(1);
+				}
+				100% {
+					transform: scale(0);
+				}
+			}
+			@keyframes loading__dots-ellipsis2 {
+				0% {
+					transform: translate(0, 0);
+				}
+				100% {
+					transform: translate(24px, 0);
+				}
+			}
+			.loading__dots {
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				font-size: 25px;
+				font-family: 'Geometria';
+				font-weight: bold;
+				z-index: 2;
+			}
+			.map .loading__dots {
+				position: absolute;
+				left: 50%;
+				top: 50%;
+				transform: translateX(-50%) translateY(-50%);
+			}
+		</style>
+		<img decoding="async" loading="lazy" src="/img/youtube-placeholder.png" style="width: 0; height: 0" alt="Видеопрезентация лота"/>
+		<div id='preloader' class="activ_preloader" onclick="$('#preloader').addClass('activ_preloader');">
+			<div class="loading__dots">
+				<div  class="loading__dots-ellipsis"><div></div><div></div><div></div><div></div></div>
+			</div> 
+			<div id="preloader_white"></div>
+		</div>
+				<noindex>
+	<style>
+		.modal-pure,
+		.dialog{
+			display: none;
+		}
+
+		.pluginDialog__wrapper .modal-pure__box {
+			padding: 60px;
+		}
+
+		.pluginDialog__wrapper .modal-pure_title{
+			text-transform: none;
+		}
+		.pluginDialog__wrapper .modal-pure__infopart{
+			margin-top: 20px;
+			text-align: left;
+			font-weight: 400;
+			font-size: 16px;
+			line-height: 24px;
+		}
+
+		.pluginDialog__wrapper ol li{
+			list-style: inherit;
+		}
+
+		.invisible__crypto-verification{
+			display: none;
+		}
+
+		@media (max-width: 760px) {
+
+			.crypto__verification-ref{
+				width: 100%;
+				display: block;
+				height: 100%;
+			}
+
+			.crypto__verification-ref a{
+				width: 100%;
+				display: inline-block;
+				height: 100%;
+				word-wrap: break-word;
+			}
+
+			.invisible__crypto-verification{
+				display: none;
+				padding-bottom: 0px;
+				padding-top: 0px;
+			}
+		}
+
+		#certSel2_activeTo{
+			width:100%;
+		}
+		#certSel2_listCert{
+			width:100%;
+		}
+		.dialog2__certificat{
+			width:100%;
+		}
+		.button_visibleCertList{
+			display: none;
+			width:100%;
+			opacity: 1;
+			transition: 0.5s;
+		}
+
+		.button_visibleCertList.transparent {
+			opacity: 0;
+			pointer-events: none;
+		}
+
+
+		.dialog2_certVisible {
+			display: none;
+		}
+		.button_visibleCertList div{
+			text-decoration: underline;
+			height: 25px;
+			cursor: pointer;
+			line-height: 25px;
+			padding: 2px 0;
+			font-size: 18px;
+			font-weight: 400;
+			margin-left: 8px;
+			color: #1e3654;
+			float: left;
+		}
+
+		.signCover.forced {
+			display: block!important;
+		}
+
+		.signCover {
+			position: fixed;
+			z-index: 9999;
+			width: 100%;
+			height: 100%;
+			cursor: wait;
+			display: none;
+			background-color: rgba(0,0,0,0.1);
+		}
+		.signMsgTop {
+			cursor: default;
+			position: fixed;
+			left: 50%;
+			background-color: #fff;
+			width: 240px;
+			height: 96px;
+			background-image: url(/img/gears.svg);
+			background-position: center center;
+			background-repeat: no-repeat;
+			border: 1px solid black;
+			margin-left: -50px;
+			box-shadow: 0px 0px 30px 1px rgba(0,0,0,0.5);
+			top: -1px;
+			border-bottom-left-radius: 31px;
+			border-bottom-right-radius: 30px;
+			background-position-x: 20px;
+			padding-left: 105px;
+			box-sizing: border-box;
+			padding-top: 24px;
+			z-index: 2000;
+			font-size: 16px;
+		}
+
+		.signSelectGosKeyTypes .sigTypes.sigGosKeyTypes,
+		.sigTypes {
+			display: flex;
+			flex-direction: column;
+		}
+		.signSelectGosKeyTypes .sigTypes,
+		.sigTypes.sigGosKeyTypes{
+			display: none;
+		}
+		
+		.sigType {
+			display: flex;
+			border-radius: 6px;
+		}
+
+		.signSelectType .sigType {
+			background-color: #f5f6f9;
+			padding: 20px;
+			margin-bottom: 20px;
+		}
+
+		.sigType .text {
+			text-align: left;
+			padding-left: 20px;
+
+		}
+
+		.sigType .text p {
+			margin-top: 0;
+		}
+
+		.sigType .text p:last-of-type {
+			margin-bottom: 0;
+		}
+
+		.sigType .text button {
+			margin-top: 10px;
+			float: right;
+		}
+
+		.sbtn {
+			width: 100px;
+			height: 100px;
+			min-width: 100px;
+			/*border: 1px solid gray;*/
+			background-size: contain;
+			background-repeat: no-repeat;
+			background-position: center;
+		}
+
+		.sbtn.kep {
+			background-image: url(/css/blue/images/kep.svg)
+		}
+		.sbtn.goskey {
+			background-image: url(/css/blue/images/goskey.svg)
+		}
+	</style>
+	<div class="modalDialog__wrapper modal-pure">
+		<div class="modalDialog modal-pure__box" id="modalDialog">
+			<p class="modal-pure_title">Сообщение</p>
+			<div class="modal-pure__infopart">
+
+			</div>
+			<div class="modalDialog_close modal-pure__close"></div>
+		</div>
+	</div>
+	<div class="dialog2__wrapper modal-pure" >
+		<div id="dialog2" class="modal-pure__box">
+			<p class="modal-pure_title">Выберите сертификат</p>
+			<div class="modal-pure__infopart">
+				<div id="certSel2" class="dialog2__certificat scrollbar-mets" data-scrollbar>
+					<div id="certSel2_activeTo" class="dialog2_certVisible"></div>
+					<div id="certSel2_listCert"></div>
+
+				</div>	
+				<div class="button_visibleCertList"><div>Показать полный список</div></div>
+			</div>
+			<div class="dialog2_close modal-pure__close"></div>	
+			<div class="button__container">
+				<div class="container-button__section ">
+					<input type="button" value="Назад" class="grey-button container-button__otmena" id="button_cert-otmena">
+					<input type="button" value="Далее" class="blue-button container-button__dalee" id="button_cert-dalee">
+				</div>
+			</div>
+		</div>	
+	</div>
+	<div class="pluginDialog__wrapper modal-pure">
+		<div class="pluginDialog modal-pure__box" id="pluginDialog">
+			<div class="modal-pure__titles">
+				<p class="modal-pure_title">У Вас не выполнена настройка УКЭП на USB-носителе для работы на ЭТП МЭТС.</p>
+				<p class="modal-pure_title">Вам необходимо выполнить следующие пункты:</p>
+			</div>
+			<div class="modal-pure__infopart">	
+				<div class="crypto__verification-text noMobile">
+					<ol type="1">
+						<li>Установить программу криптопровайдер <a rel="nofollow" target="_blank" href="https://www.cryptopro.ru/products/csp">КриптоПро CSP</a> для работы с электронной подписью</li>
+						<li>Установить <a rel="nofollow" href="/static/cadesplugin.exe">КриптоПро ЭЦП browser plug-in</a>. Это программное обеспечение предназначено для создания и проверки электронной подписи на web-страницах</li>
+						<li class="librow ie">Скачайте, откройте и добавьте в реестр настройки для Internet Explorer в REG файле. <a rel="nofollow" href="/static/fullActivate.reg">Скачать</a>.</li>
+						<li class="librow firefox">
+							Скачайте расширение по <a rel="nofollow" target="_blank" href="https://www.cryptopro.ru/sites/default/files/products/cades/extensions/firefox_cryptopro_extension_latest.xpi">ссылке</a>, 
+							затем переместите скачанный файл в любую вкладку браузера и нажмите "Установить расширение".
+							После установки расширения обязательно закройте полностью браузер и запустите его заново.
+						</li>
+												<li class="librow chrome yandex">Установите <a rel="nofollow" target="_blank" href="https://chromewebstore.google.com/detail/extension-for-cades-brows/pfhgbfnnjiafkhfdkmpiflachepdcjod">расширение КриптоПро для Google Chrome</a>. Для просмотра инструкции по установке откройте следующую ссылку <a rel="nofollow" href="https://www.cryptopro.ru/products/cades/plugin">https://www.cryptopro.ru/products/cades/plugin</a></li>
+						<li class="librow opera">Установите <a rel="nofollow" target="_blank" href="https://addons.opera.com/ru/extensions/details/cryptopro-extension-for-cades-browser-plug-in/">расширение КриптоПро для Opera</a>. Для просмотра инструкции по установке откройте следующую ссылку <a rel="nofollow" href="https://www.cryptopro.ru/products/cades/plugin">https://www.cryptopro.ru/products/cades/plugin</a></li>
+						<li class="librow hz edge">Установите один из поддерживаемых браузеров: 
+							<a rel="nofollow" target="_blank" href="https://www.mozilla.org/ru/">Mozilla Firefox</a>, 
+							<a rel="nofollow" target="_blank" href="https://www.google.ru/chrome/browser/desktop/index.html">Google Chrome</a>, 
+							<a rel="nofollow" target="_blank" href="https://browser.yandex.ru/">Яндекс Браузер</a>, 
+							<a rel="nofollow" target="_blank" href="https://www.opera.com/ru/download">Opera</a>.
+						</li>
+					</ol>
+					<div class="crypto__verification-ref">
+
+					</div>
+										<p class="crypto__verification-ref">
+						Для физических лиц и ИП подпись документов возможна через раздел <b>«Госключ»</b> в мобильном приложении <b>«Госулуги»</b>, для этого необходимо включить соответствующий пункт в профиле. Настройка Госключа описана по ссылке 
+						<a target="_blank" href="https://m-ets.ru/goskey">https://m-ets.ru/goskey</a>.
+					</p>
+									</div>
+				<div class="crypto__verification-ref isMobile" style="display: none;">
+					В мобильной версии <span style="color:red;">не предусмотрена </span> работа с Квалифицированной электронной подписью. Данный функционал доступен в полной версии, на ОС Windows, MacOS или Linux.
+				</div>
+								<p class="crypto__verification-ref isMobile" style="display: none;">
+					Для физических лиц подпись документов возможна через приложение Госключ, для этого необходимо включить соответствующий пункт в профиле.
+				</p>
+							</div>
+			<div class="pluginDialog_close modal-pure__close"></div>
+		</div>
+	</div>
+	<div class="photoAlbom__wrapper modal-pure">
+		<div id="photoAlbom" style="width:100%;">
+			<div style="width:100%;">
+				<div class="photoAlbom__fotorama fotorama"  data-loop="true" data-auto="false" data-keyboard="true" data-nav="thumbs" data-width="100%" data-height="100%">
+
+				</div>
+			</div>
+						<div class="modal-pure__close-white photoAlbom_close " ></div>
+		</div>
+	</div>
+	<div class="modConfirmDialog__wrapper modal-pure">
+		<div id="modConfirmDialog" class="modConfirmDialog modal-pure__box" title="Подтверждение пубикации изменений к торгам">
+			<div class="modal-pure__infopart">	
+				<form method="post" action="competitionModify" class="modConfirmDialog__form">
+					<input type="hidden" name="op" value="confirm">
+					<input id="compConfFormId" type="hidden" name="id" value="">
+					<div class="modConfirmDialog__text">
+						Подтвердить публикацию изменений к торгам от <span id="compConfFormDate"></span>?
+					</div>
+					<div class="modConfirmDialog__buttons">
+						<input type="submit" value="Подтвердить"> 
+						<input value="Отмена" type="button" onclick="$('.modConfirmDialog__wrapper').removeClass('active')">
+					</div>
+				</form> 
+			</div>
+			<div class="modConfirmDialog_close modal-pure__close"></div>
+		</div>
+	</div>
+	<div  class="calculatePotential__wrapper modal-pure">
+		<div class="calculatePotential modal-pure__box" >
+			<div class="sber-icon"></div>
+			<p class="authprew-title">Кредит для участия в торгах</p>
+			<br/> 
+			<div  class="modal-pure__credit">
+				<div>
+										<input id="person" type="radio" name="calculatePotential"  onclick="updateFizIp()" checked value="0"/> 
+					<label for="person" class="radio-label"> Физического лица</label>
+					<br/>
+															<input id="legal" type="radio" name="calculatePotential"  onclick="updateFizIp()" value="1"/>
+					<label for="legal" class="radio-label title"> Юридического лица</label>
+					<br/>
+															<input id="individual" type="radio" name="calculatePotential" onclick="updateFizIp()" value="2"/>
+					<label for="individual" class="radio-label title"> Индивидуального предпринимателя</label>
+					<br/>
+									</div>
+				<span><br/></span>
+				<a id="IPasFiz" href="" ><button class="blue-button" onclick="businessPotential()">Далее</button></a>
+			</div>	
+			<div class="calculatePotential_close modal-pure__close"></div>
+		</div>
+        </div>
+	<div  class="creditPotentialDialog__wrapper modal-pure" >
+		<div id="creditPotentialDialog" class="creditPotentialDialog modal-pure__box" >
+			<p class="authprew-title">Что такое кредитный потенциал?</p>
+			<div class="modal-pure__infopart">	
+				Кредитный потенциал — бесплатный сервис, который помогает узнать,
+				какие максимальные суммы кредитов вам готов одобрить банк. 
+				Вы можете сразу подать заявку на понравившееся кредитное предложение.
+				Также кредитный потенциал покажет текущую долговую нагрузку, все кредиты и карты, которые есть у вас в Сбере и других банках
+				<span><br> </span>
+				<a href="http://www.sberbank.ru/sms/cp-website?erid=LdtCKGQ4S" target='_blank' rel="nofollow">
+					<button class="blue-button" onclick="closeDialog(0); ym(32572190,'reachGoal','credpot_fl')">Рассчитать</button>
+				</a>
+			</div>
+			<div class="creditPotentialDialog_close modal-pure__close"></div>
+		</div>
+	</div>
+	<div  class="businessPotential__wrapper modal-pure">
+		<div class="businessPotential modal-pure__box" >
+			<div class="sber-business-icon"></div>
+			<p class="authprew-title">Кредит для участия в торгах</p>
+			<br/>
+			<div class="modal-pure__credit">	
+				<ul> 
+					<li>Без комиссии за выдачу</li>
+					<li>Повторное использование</li>
+					<li>Срок до 36 месяцев</li>
+
+
+				</ul>	
+				<span><br></span>
+				<div style="display:flex">
+					<a onclick="businessCredit(true, event);" href="https://sbi.sberbank.ru:9443/ic/ufs/index.html#/credits/credit-financing/create?category=products_and_services&partnerCode=partnermetscloborot&erid=LdtCKGQ4S" class="blue-button" target='_blank' rel="nofollow">Есть счет в СберБизнес</a>
+					<a onclick="businessCredit(false, event);" href="https://sbi.sberbank.ru:9443/ic/ufs/login.html#/register?ReturnTo=/guest-area/org-register&BackUrl=https%3A%2F%2Fsbi.sberbank.ru%3A9443%2Fic%2Fdcb%2Findex.html%23%2Fguest-area&partnerCode=partnermetsnecloborot&productCode=CreditMMB&erid=LdtCKGQ4S" class="blue-button credit__potential" target='_blank' rel="nofollow">Нет счета в СберБизнес</a>
+
+				</div>
+			</div>
+			<div class="businessPotential_close modal-pure__close"></div>
+		</div>
+	</div>
+	<div class="modRejectDialog__wrapper modal-pure">
+		<div id="modRejectDialog" class="modRejectDialog modal-pure__box" title="Отказ публикации изменений к торгам">
+			<div class="modal-pure__infopart">	
+				<form onsubmit="return checkModRejectForm(this)" method="post" action="competitionModify" class="modRejectDialog__form">
+					<input type="hidden" name="op" value="reject">
+					<input id="compRejFormId" type="hidden" name="id" value="">
+					<p class="modRejectDialog__text">Отказать в публикации изменений к торгам от <span id="compRejFormDate"></span> ? </p>
+					<div class="modRejectDialog__reason">
+						<span>Причина:</span>
+						<!--<input required size="70" type="text" name="reason">-->
+						<textarea size="70"  name="reason" rows="4" cols="30"></textarea>
+					</div>
+					<div class="modRejectDialog__buttons">
+						<input type="submit" value="Отказать"> 
+						<input value="Отмена" type="button" onclick="$('.modRejectDialog__wrapper').removeClass('active');">
+					</div>
+				</form> 
+			</div>
+			<div class="modRejectDialog_close modal-pure__close"></div>
+		</div>
+	</div>
+
+	<div class="customDialog__wrapper modal-pure">
+		<div id="customDialog" class="customDialog modal-pure__box">
+			<div class="dialog-title"></div>
+			<div class="modal-pure__infopart">
+
+			</div>
+			<div class="customDialog_close modal-pure__close"></div>
+		</div>
+	</div>
+
+	<div class="authDialog__wrapper modal-pure">
+		<div id="authDialog" class="authDialog modal-pure__box">
+			<div class="auth-block">
+				<div class="authb-tile">Авторизация в системе</div>
+				<form class="ajaxloginform auth-form" method="post" action="/authorize" onsubmit="ajaxLogin(); return false;">
+					<input type="hidden" name="type" value="ajax">
+					<label class="authinp-c">
+						<span class="title">Адрес электронной почты (логин)</span>
+						<input type="text" name="login" required="" class="login__auth" />
+					</label>
+					<label class="authinp-c">
+						<span class="title">Пароль</span>
+						<input type="password" name="password" required="" />
+					</label>
+					<label class="authinp-c">
+						<input class="blue-button" type="submit" value="Войти" />
+					</label>
+				</form>
+								<div class='hr no-ios-app'><span class="title">или войти с помощью</span></div>
+				<div class='oauths-container no-ios-app'>
+															<a target="_blank" class="yandex_oauth_btn" href="https://oauth.yandex.ru/authorize?response_type=code&client_id=54e293c26c86495787d5d2a1234fa551&force_confirm=1&state=%2Ftrade%2F%3Fq%3D%25D0%25B7%25D0%25B5%25D0%25BC%25D0%25B5%25D0%25BB%25D1%258C%25D0%25BD%25D1%258B%25D0%25B9%2B%25D1%2583%25D1%2587%25D0%25B0%25D1%2581%25D1%2582%25D0%25BE%25D0%25BA%2B%25D0%259B%25D0%25B5%25D0%25BD%25D0%25B8%25D0%25BD%25D0%25B3%25D1%2580%25D0%25B0%25D0%25B4%25D1%2581%25D0%25BA%25D0%25B0%25D1%258F%2B%25D0%25BE%25D0%25B1%25D0%25BB%25D0%25B0%25D1%2581%25D1%2582%25D1%258C%26category%3Dland" rel="nofollow">
+						<span class='icon'></span>
+						<span class='title'>Войти с Яндекс ID</span>
+					</a>
+															<a target="_blank" class="mail_oauth_btn" href="https://oauth.mail.ru/login?response_type=code&client_id=ad3e8d7d6be3437983ff21a82355dcdf&prompt_force=1&redirect_uri=https://m-ets.ru/oauth%3Fprovider=mailru&state=%2Ftrade%2F%3Fq%3D%25D0%25B7%25D0%25B5%25D0%25BC%25D0%25B5%25D0%25BB%25D1%258C%25D0%25BD%25D1%258B%25D0%25B9%2B%25D1%2583%25D1%2587%25D0%25B0%25D1%2581%25D1%2582%25D0%25BE%25D0%25BA%2B%25D0%259B%25D0%25B5%25D0%25BD%25D0%25B8%25D0%25BD%25D0%25B3%25D1%2580%25D0%25B0%25D0%25B4%25D1%2581%25D0%25BA%25D0%25B0%25D1%258F%2B%25D0%25BE%25D0%25B1%25D0%25BB%25D0%25B0%25D1%2581%25D1%2582%25D1%258C%26category%3Dland" rel="nofollow">
+						<span class='icon'></span>
+						<span class='title'>Почта Mail.ru</span>
+					</a>
+									</div>
+								<div class="auth-reg">
+					<a target="_blank" href="/reg">Регистрация</a>
+				</div>
+				<div class="auth-remindme">
+					<a target="_blank" href='/remindme'>Забыли пароль?</a>
+				</div>
+			</div>
+			<div class="authDialog_close modal-pure__close"></div>
+		</div>
+	</div>
+	<div class="postAuthDialog__wrapper modal-pure">
+		<div id="postAuthDialog" class="postAuthDialog modal-pure__box" >
+			<script>
+$(function() {	
+	var currentHref=window.location.href;
+	if (currentHref.indexOf("#block=autoreports") != -1){
+		var url=$("[name=uri").val();
+		if (url.indexOf("#block=autoreports") == -1){	
+			$("[name=uri").val( url + "#block=autoreports"); 
+		}
+	}
+});
+	
+</script>	
+<div class="auth-block">
+	<div class="authb-tile">Авторизация в системе</div>
+	<form method="post" action="/authorize" class="auth-form">
+		<input type="hidden" name="uri" value="/trade/?q=%D0%B7%D0%B5%D0%BC%D0%B5%D0%BB%D1%8C%D0%BD%D1%8B%D0%B9+%D1%83%D1%87%D0%B0%D1%81%D1%82%D0%BE%D0%BA+%D0%9B%D0%B5%D0%BD%D0%B8%D0%BD%D0%B3%D1%80%D0%B0%D0%B4%D1%81%D0%BA%D0%B0%D1%8F+%D0%BE%D0%B1%D0%BB%D0%B0%D1%81%D1%82%D1%8C&category=land">
+		<label class="authinp-c">
+			<span class="title">Адрес электронной почты (логин)</span>
+			<input type="text" name="login" value="" required="" />
+		</label>
+		<label class="authinp-c">
+			<span class="title">Пароль</span>
+			<input type="password" name="password" required="" />
+		</label>
+		<label class="authinp-c">
+			<input class="blue-button" type="submit" value="Вход" />
+		</label>
+	</form>
+		<div class='hr no-ios-app'><span class="title">или войти с помощью</span></div>
+	<div class='oauths-container no-ios-app'>
+								<a class="yandex_oauth_btn" href="https://oauth.yandex.ru/authorize?response_type=code&client_id=54e293c26c86495787d5d2a1234fa551&force_confirm=1&state=%2Ftrade%2F%3Fq%3D%25D0%25B7%25D0%25B5%25D0%25BC%25D0%25B5%25D0%25BB%25D1%258C%25D0%25BD%25D1%258B%25D0%25B9%2B%25D1%2583%25D1%2587%25D0%25B0%25D1%2581%25D1%2582%25D0%25BE%25D0%25BA%2B%25D0%259B%25D0%25B5%25D0%25BD%25D0%25B8%25D0%25BD%25D0%25B3%25D1%2580%25D0%25B0%25D0%25B4%25D1%2581%25D0%25BA%25D0%25B0%25D1%258F%2B%25D0%25BE%25D0%25B1%25D0%25BB%25D0%25B0%25D1%2581%25D1%2582%25D1%258C%26category%3Dland" rel="nofollow">
+			<span class='icon'></span>
+			<span class='title'>Войти с Яндекс ID</span>
+		</a>
+						<a class="mail_oauth_btn" href="https://oauth.mail.ru/login?response_type=code&client_id=ad3e8d7d6be3437983ff21a82355dcdf&prompt_force=1&redirect_uri=https://m-ets.ru/oauth%3Fprovider=mailru&state=%2Ftrade%2F%3Fq%3D%25D0%25B7%25D0%25B5%25D0%25BC%25D0%25B5%25D0%25BB%25D1%258C%25D0%25BD%25D1%258B%25D0%25B9%2B%25D1%2583%25D1%2587%25D0%25B0%25D1%2581%25D1%2582%25D0%25BE%25D0%25BA%2B%25D0%259B%25D0%25B5%25D0%25BD%25D0%25B8%25D0%25BD%25D0%25B3%25D1%2580%25D0%25B0%25D0%25B4%25D1%2581%25D0%25BA%25D0%25B0%25D1%258F%2B%25D0%25BE%25D0%25B1%25D0%25BB%25D0%25B0%25D1%2581%25D1%2582%25D1%258C%26category%3Dland" rel="nofollow">
+			<span class='icon'></span>
+			<span class='title'>Почта Mail.ru</span>
+		</a>
+			</div>
+		<div class="auth-reg">
+		<a href="/reg">Регистрация</a>
+	</div>
+	<div class="auth-remindme">
+		<a href='/remindme'>Забыли пароль?</a>
+	</div>
+</div>			<div class="postAuthDialog_close modal-pure__close"></div>
+		</div>
+	</div>
+	<div class="podpiskaDialogDone__wrapper modal-pure">
+		<div  id="podpiskaDialogDone" class="podpiskaDialogDone modal-pure__box" data-title="Подписка заказана">
+			<div class="modal-pure__infopart">	
+				<p style="padding-bottom: 10px;" class="commontable">
+					Подписка заказана. Вы можете <a class="btn" href="servicePay">перейти к оплате</a> или продолжить просмотр.
+				</p>
+				<p>
+					Управление подписками доступно в <a href="cabinet#block=subscriptions">Личном кабинете</a>.
+				</p>
+			</div>
+			<div class="podpiskaDialogDone_close modal-pure__close"></div>
+		</div>
+	</div>
+	<div class="kadNumDialogDone__wrapper modal-pure">
+		<div id="kadNumDialogDone" class="kadNumDialogDone modal-pure__box" data-title="Отчет добавлен в заказ">
+			<div class="modal-pure__infopart">	
+				<p style="padding-bottom: 10px;" class="commontable">
+					Отчет об объекте недвижимости добавлен в заказ. Вы можете <a class="btn" href="servicePay">перейти к оплате</a> или продолжить просмотр.
+				</p>
+				<p>
+					Просмотр заказанных отчетов доступен в <a href="cabinet#block=kadnumreports">Личном кабинете</a>.
+				</p>
+			</div>
+			<div class="kadNumDialogDone_close modal-pure__close"></div>
+		</div>
+	</div>
+
+	<div class="kadNumDialog__wrapper modal-pure">
+		<div class="kadNumDialog modal-pure__box" id="kadNumDialog" title="Отчет по кадастровому номеру">
+			<div class="modal-pure__infopart">
+				<p class="kadNumDialog__title">Заказ отчета об объекте недвижимости по кадастровому номеру <b class="kadNumDialog__kadnum"></b></p>
+				<form name="kadNumDialogForm" class="kadNumDialog__content">
+					<p class="kadNumDialog__price"><b>690 руб.</b><span>Стоимость получения отчета</span></p>
+										<div class="verifCode">											<div class="verifCode__title">E-mail</div>
+	<div class="verifCode__inputs">
+		<div class='verifCode__input-container' data-type="email">
+			<input 
+										class="verifCode__input" 
+				type="text"  
+				value=""  
+				placeholder="example@example.com" 
+													name="email" 	
+			autocomplete="on"
+			required
+							data-edit="true" 
+						/>
+		</div>
+		 		<input
+			class="light-blue-button verifCode__btn"
+			type="button" 
+			value=" Подтвердить" 			data-type="email-code-btn"
+			data-length="6"
+			data-interval="40"
+			>
+			</div>
+</div>
+					<div class="kadNumDialog__submit-container"><input class="blue-button btn " type="submit"  disabled  value="Заказать" data-tarif="2" onclick="orderKadnumReport(event)"></div>
+										<p class="kadNumDialog__attention"> Отчет будет доступен для просмотра только после <a href="page/register" onclick="showPostAuthDialog(); document.getElementById('kadNumDialog').querySelector('.kadNumDialog_close').click(); return false;">авторизации в системе</a></p>
+					
+				</form>
+				<div class="contract-offer">
+	Выбирая услугу Вы принимаете условия <a href="static/offer_dop_2020.doc" target="_blank">Договора Оферты</a>.
+</div>
+			</div>
+			<div class="kadNumDialog_close modal-pure__close"></div>	
+		</div>
+	</div>
+
+	<div class='signCover' style="display: none">
+		<div class='signMsgTop'>
+			<span>формирование подписи...</span>
+		</div>
+	</div>
+	<div class="dialog" id="certDialog" title="ВЫБЕРИТЕ СЕРТИФИКАТ">
+		<select id="certSel"></select>
+		<!--<div id="certSel2" class="dialog2__certificat"></div>-->
+	</div>
+	<div class="dialog" id="signDialog" title="Подпись"></div>
+	<div class="dialog" id="wsBadConnectDialog" title="Связь с сервером прервалась">
+		<div class="dialog__ws_connect"><span>Подключение...</span></div>
+	</div>
+	<div class="dialog" id="fileDialog" title="Загрузка файла">Допускаются файлы следующих форматов: doc, docx, xls, xslx, pdf, gif, jpg, tif, png, zip, rar, 7z. Размер файла не должен превышать 25 мегабайт.<iframe id="fileFrame" frameBorder="0" allowTransparency="true" style="overflow: hidden; height: 100px"></iframe></div>
+
+
+	<div class="concours__wrapper modal-pure">
+		<div  id="concours" class=" modal-pure__box" data-title="Условия торгов (конкурса)">
+			<div class="modal-pure__infopart">
+				<p> Напоминаем: Условия конкурса, это условия установленные решением собрания кредиторов или комитета кредиторов
+					в соответствии с законодательством Российской Федерации
+					( не путать с требованиями к подаче заявке в электронном виде, описанном в №127-ФЗ “О несостоятельности (банкротстве)"
+					от 26.10.2002 г. и в приказе Минэкономразвития РФ от 23.07.2015 №495 ) </p> 
+				<center><input class="blue-button" type="button" onclick="concoursClick()" value="Ознакомлен"></center>
+			</div>
+
+			<div class="concours_close modal-pure__close"></div>
+
+		</div>
+
+	</div>
+	<div class="aDialog-custom modal-pure sendToGoskeyDialog"> 		<div class="modal-pure__box">
+			<div class="dialog-title"></div>
+			<div class="modal-pure__infopart">
+				<div class="sigTypes">
+					<div class="sigType">
+						<div class="sbtn goskey"></div>
+						<div class="text">
+							<p>
+								Документ отправлен на подпись в Ваше приложение Госключ. 
+								Проверьте поступившие документы в своём приложении Госключ и подпишите пакет документов <span id="goskeypackageprefix"></span><b id="goskeypackagename"></b> в течение указанного срока. 
+							</p>
+							<p><b>Внимание!</b> Не закрывайте данную страницу! В случае закрытия страницы подпись документа не сохранится! Убедитесь, что Вы не используете VPN.</p>
+							<p>До окончания срока подписания осталось <span class="countdown" data-seconds="900"></span>.</p>
+						</div>
+					</div>
+				</div>
+				 
+			</div>
+			<div class="modal-pure__input"></div>
+			<div class="modal-pure__buttons"></div>
+			<div class="modal-pure__close"></div>
+		</div>
+	</div>	
+	<div class="aDialog modal-pure signDialog">
+		<div class="modal-pure__box">
+			<div class="modal-pure_title">
+				<div>Выберите сертификат</div>
+				<div class="loader loadingio-spinner-spinner-nq4q5u6dq7r"><div class="ldio-x2uulkbinc">
+						<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+					</div></div>
+			</div>
+			<div class="certLoadInfo">Инициализация плагина</div>
+			<div class="modal-pure__infopart">
+				<div class="dialog__certificat scrollbar-mets">
+					<div class="certSel_listCert"></div>
+				</div>
+				<div class="button_visibleCertList"><div>Показать полный список <span></span></div></div>
+			</div>
+			<div class="button__container">
+				<div class="container-button__section ">
+					<input type="button" value="Отмена" class="grey-button cancel">
+					<input type="button" value="Далее" class="blue-button container-button__dalee" disabled="">			
+				</div>
+			</div>
+
+			<div class="modal-pure__close"></div>
+		</div>
+	</div>
+	<div class="aDialog-custom modal-pure signSelectType">
+		<div class="modal-pure__box">
+			<div class="dialog-title">Выберите тип электронной подписи</div>
+			<div class="modal-pure__infopart">
+				<div class="sigTypes">
+					<div class="sigType">
+						<div class="sbtn kep"></div>
+						<div class="text">
+							Квалифицированная электронная подпись на USB носителе. Выдается в удостоверяющем центре.
+							<div><button class="blue-button ok" data-value="1">Выбрать</button></div>
+						</div>
+					</div>
+					<div class="sigType">
+						<div class="sbtn goskey"></div>
+						<div class="text">
+							Квалифицированная электронная подпись через приложение Госключ. <a href="/goskey" target="_blank">Подробнее</a>.
+							<div><button class="blue-button ok" data-value="2">Выбрать</button></div>
+						</div>
+					</div>
+				</div>
+				<div class="sigTypes sigGosKeyTypes">
+					<div class="sigType">
+						<div class="sbtn goskey"></div>
+						<div class="text">
+							Квалифицированная электронная подпись через приложение Госключ. Отправка документов на подпись в «Госключ» <b>физическому лицу</b>.
+							<div><button class="blue-button ok" data-value="3">Выбрать</button></div>
+						</div>
+					</div>
+					<div class="sigType">
+						<div class="sbtn goskey"></div>
+						<div class="text">
+							Квалифицированная электронная подпись через приложение Госключ. Отправка документов на подпись в «Госключ» <b>юридическому лицу или индивидуальному предпринимателю</b>
+							<div><button class="blue-button ok" data-value="4">Выбрать</button></div>
+						</div>
+					</div>
+				</div>
+				 			</div>
+			<div class="modal-pure__close"></div>
+		</div>
+	</div>
+
+	<script>
+		async function selectGosKeyType()	{
+			selectSignDialog = aCreateDialog(".signSelectType", "signSelectGosKeyTypes");
+			selectSignDialog.showDialog();
+			return selectSignDialog.promises();
+		}
+		function ajaxLogin() {
+			var data = new FormData(jQuery('form.ajaxloginform')[0]);//$("form.ajaxloginform").serialize();
+			jQuery("#authDialog input[type=submit]").attr("disabled", true);
+			jQuery("#authDialog input[type=submit]").val("Вход...");
+			jQuery.ajax({
+				type: 'POST',
+				url: "authorize",
+				data: data,
+				cache: false,
+				contentType: false,
+				processData: false,
+				success: function (d) {
+					var data = d;
+					dd = data;
+					if (data.isAuth == "true" || data.isAuth === true) {
+						$(".authDialog__wrapper").removeClass('active')
+						if (typeof signFormParams !== 'undefined' && signFormParams) {
+							signForm(signFormParams.formId, signFormParams.formName, signFormParams.checkUrl);
+						}
+					} else {
+						aAlert("Неверные логин/пароль!");
+					}
+					$("#authDialog input[type=submit]").removeAttr("disabled");
+					$("#authDialog input[type=submit]").val("Войти");
+				},
+				error: function (data) {
+					aAlert("err");
+					$("#authDialog input[type=submit]").removeAttr("disabled");
+					$("#authDialog input[type=submit]").val("Войти");
+				}
+			});
+
+		}
+
+		function concoursClick() {
+			localStorage.setItem('concours_conditions_Click', 1);
+			document.querySelector('.concours__wrapper').classList.remove('active');
+			return;
+		}
+	
+		function businessPotential(){
+			var nom=jQuery("input[type=radio][name=calculatePotential]:checked").val();
+			jQuery(".calculatePotential__wrapper").removeClass('active');
+			if(nom == 0) {
+				//Физ. лицо
+				jQuery("#IPasFiz").removeAttr('href');  
+				activateJSdialog('.creditPotentialDialog');	
+				jQuery(".creditPotentialDialog__wrapper").addClass('active');
+				return;
+			}
+			//Юр. лицо или ИП
+			activateJSdialog('.businessPotential');	
+			jQuery(".businessPotential__wrapper").addClass('active');
+			if (nom == "1") {
+				//Юр. лицо
+				jQuery("#liUri").css({'display':'list-item'});
+				jQuery("#liIp").css('display','none');
+			}
+			if (nom == "2") {
+				//ИП
+				jQuery("#liIp").css({'display':'list-item'});
+				jQuery("#liUri").css('display','none');
+			}
+		
+		}
+		function updateFizIp(){
+			var nomer=jQuery("input[type=radio][name=calculatePotential]:checked").val();
+			 if ( nomer == 1 || nomer == 2) //ЮР ИП
+					 jQuery("#IPasFiz").removeAttr('href');   
+			if (nomer ==1) 	{
+					jQuery("#isUr").css('display','block');
+					jQuery("#isIp").css('display','none');
+			}	
+			if (nomer ==2) 	{
+					jQuery("#isIp").css('display','block');
+					jQuery("#isUr").css('display','none');
+			}
+		}
+		function closeDialog(nom){
+			if (nom == 0 )jQuery(".creditPotentialDialog__wrapper").removeClass('active');
+			if (nom == 1 )jQuery(".businessPotential__wrapper").removeClass('active');
+		}
+		
+		function showGoskeySignDialog(_packageName){
+			var packageName = "";
+			var packagePrefix = "";
+			if(void 0 !== _packageName && null !== _packageName){
+				packageName = _packageName;
+				packagePrefix = "отправленный в ";
+			}
+			jQuery(".sendToGoskeyDialog #goskeypackagename").text(packageName);
+			jQuery(".sendToGoskeyDialog #goskeypackageprefix").text(packagePrefix);
+			aDialog(".sendToGoskeyDialog", null, true);
+			
+			window.addEventListener("beforeunload", beforeunloadFunc);
+			
+			countdown(".countdown", function(){
+				if(jQuery(".signCover:visible").length > 0){
+					aAlert("Истекло время подписания документов!");
+				}
+				console.log("closeGoskeySignDialog from countdown");
+				closeGoskeySignDialog();
+			});
+		}
+		
+		function closeGoskeySignDialog(){
+			$(".sendToGoskeyDialog.active").data("aDialog")?.closeDialog();
+			window.removeEventListener("beforeunload", beforeunloadFunc);
+			jQuery(".signCover").hide();
+			cancelCheckGoskey();
+		}
+		var businessCredit = async (accountExist, event) => {
+			if(void 0 === accountExist){
+				accountExist = false;
+			}
+			var target = event?.target;
+			jQuery(target).attr("disabled", true);
+			if(void 0 !== event && event?.isTrusted){
+								event?.preventDefault();
+				var fd = new FormData();
+				fd.append('act', "create");
+				fd.append('account_exist', accountExist);
+				var result = await aPostData("/ajax/api/sberDaSreda", fd);
+				if(!result?.success && result.data.length !== 0){
+					var r = await aModalDialog({
+						title:"<div class=\"sber-business-icon\"></div>",
+						html: result.data[0],
+						buttons: {
+							cancel:{
+								enable:false
+							}
+						},
+						onSuccess: async function(event, $dialog, resolve){
+							event.preventDefault();
+							event.stopPropagation();
+							var form = jQuery("form", $dialog)[0];
+							
+							var fd = new FormData(form);
+							fd.append('act', "create");
+							fd.append('account_exist', accountExist);
+							var result = await aPostData("/ajax/api/sberDaSreda", fd);
+							if(result?.success){
+								$dialog.ok.prop("disabled", false);
+								$dialog.closeDialog();
+								resolve(true);
+								jQuery(target).attr("disabled", false);
+								if(accountExist){
+									//Переход по ссылке только если есть аккаунт
+									target?.click();
+								} else {
+									await aAlert("Менеджер позвонит в течение 5 минут в рабочее время с 9:00 до 20:00. Без выходных.");
+								}
+								closeDialog(1);
+								if(void 0 !== window['ym']){
+									ym(32572190, 'reachGoal', 'credpot_has_rs');
+								}
+								return true;
+							} else {
+								if (result.message) {
+									await aAlert(result.message);
+								} else {
+									await aAlert("Ошибка отправки заявки");
+								}
+							}
+							jQuery(target).attr("disabled", false);
+						}
+					});	
+				} else if(result?.success) {
+					jQuery(target).attr("disabled", false);
+					if(accountExist){
+						//Переход по ссылке только если есть аккаунт
+						target?.click();
+					} else {
+						await aAlert("Менеджер позвонит в течение 5 минут в рабочее время с 9:00 до 20:00. Без выходных.");
+					}
+					closeDialog(1);
+					if(void 0 !== window['ym']){
+						ym(32572190, 'reachGoal', 'credpot_has_rs');
+					}
+					return true;
+				} else {
+					if (result.message) {
+						await aAlert(result.message);
+					} else {
+						await aAlert("Ошибка отправки заявки");
+					}
+				}
+				jQuery(target).attr("disabled", false);
+				return false;
+			} else {
+				jQuery(target).attr("disabled", false);
+				return true;
+			}
+		}
+	</script>
+	<div class="loadPhoto__wrapper modal-pure">
+		<div id="loadPhoto" class="loadPhoto modal-pure__box">
+			<div class="dialog-title">Требования к загружаемым изображениям лотов</div>
+			<div class="modal-pure__infopart"  style="text-align:left;font-size:16px;padding-left:30px;">
+				<div>
+					Изображения должны быть хорошего качества, в высоком разрешении, минимальный размер изображений по любой из сторон должен быть не менее 500 пикселей. Рекомендуемый размер 1920x1080 и более.
+				</div>
+				<div>
+					Изображения  должны соответствовать названию и описанию объявления, а также передавать суть вашего предложения. 
+				</div>
+				<div style="margin-right:auto">
+					Размер каждого файла не должен превышать 25 Мб.                                                            
+				</div>
+				<div style="margin-right:auto">
+					Формат файла должен быть .jpg, .jpeg
+				</div>
+				<div style="margin-right:auto">
+					Разрешено размещать только те изображения, на использование которых у Вас есть законное основание.
+				</div>
+				<div style="margin-right:auto">
+					Не используйте одинаковые изображения. 
+				</div>
+				<div style="margin-right:auto">
+					Объект(ы) лота должен быть главным элементом фотографии.
+				</div>
+				<div style="margin-right:auto">
+					Если объект предложения изображен на фоне логотипа, то такой логотип не должен занимать более 5 % фотографии. 
+				</div>
+				<div style="margin-right:auto">
+					Если на фотографии изображен человек, лицо необходимо его сделать не идентифицируемым.
+				</div>
+				<div style="margin-right:auto">
+					После подгрузки изображений их нужно правильно сориентировать (повернуть влево или вправо)
+				</div>
+				<div style="margin-right:auto">
+					Также, после подгрузки изображений, необходимо выбрать главное изображение, переместив его слева от первой картинки с помощью курсора.
+				</div>
+				<div style="margin-right:auto">
+					Для удобства рекомендуется подгружать группы изображений, выделив их в открывшемся окне, после нажатия кнопки “Загрузить картинки” (не более 30 шт)
+				</div>
+				<ul style="list-style: disc;padding:0;margin-right:auto;"> 
+					<li style="font-weight: 700;list-style: none;text-decoration: underline;text-underline-offset: 5px;">Запрещается использовать на подгружаемых изображениях:</li>
+					<li> • элементы, привлекающие внимание, например: цветные рамки, слова «срочно»,  «внимание» и т.п., за исключением элементов компьютерной графики, уточняющих местоположение объекта и т.п. </li>
+					<li> • элементы компьютерной графики, вводящие в заблуждение, искажающие реальные характеристики имущества, не несущие смысловой нагрузки</li>
+					<li> • логотипы, водяные знаки (вотермарки), или иные элементы других Интернет-ресурсов или брендов, названия организаций, имена и т.п.</li>
+				</ul>
+				<div style="margin-right:auto">
+					Мы вправе автоматически наносить на загружаемые вами изображения логотипы/водяные знаки МЭТС, чтобы предотвращать несанкционированное копирование фотографий.
+				</div>
+				<div style="margin-right:auto">
+					Мы вправе не размещать изображения по своему усмотрению, в том числе если они не соответствуют политике площадки.
+				</div>
+			</div>
+			<div class="loadPhoto_close modal-pure__close"></div>
+		</div>
+	</div>
+
+	<!-- Отправка кода подтверждения -->
+	<div class="aDialog-custom modal-pure verifCodeDialog" >
+		<div class="modal-pure__box" >
+			<div class='modal-pure__infopart'>
+				<div class="verif-code">
+					<p class="verif-code__title"></p>
+					<p class="verif-code__desc"></p>
+					<div class="verif-code__inputs"></div>
+					<a href="#" class="verif-code__timer"></a>
+				</div>
+			</div>
+			<div class="modal-pure__close"></div>
+		</div>
+	</div>
+</noindex>		<header>
+	<div class="content__container">
+		<div class="page__header_container">
+			<div class="header__menu_back header__menu_back--hidden" onclick="goBackPage()">
+				<div class="hmo-dot one"></div>
+				<div class="hmo-dot two"></div>
+				<div class="hmo-dot three"></div>
+			</div>
+			<div class="header__menu_opener" onclick="mobileMenuToggle()">
+				<div class="hmo-dot one"></div>
+				<div class="hmo-dot two"></div>
+				<div class="hmo-dot three"></div>
+			</div>
+			<a class="h-logo" href="/">
+				<img alt="logo" src="/css/blue/images/logo.svg" />
+							</a>
+			<div class="header-logo--title">эталонный маркетплейс активов</div>
+			<div class="header__datetime-wrapper" id="clock">
+				<div class="header__datetime">
+					<span class="time" id="clockTime">01:39</span>
+					<span class="date-container" >
+						<span class="timezone">(МСК)</span>
+						<span class="date" id="clockDate">27.06.2026</span>
+					</span>
+				</div>
+			</div>
+
+			<nav class="header__user_nav">
+				<ul>
+					
+					<li class="nav-lite-blue auth_btn">
+						<a href="/authorize" title="Войти" onclick="showPostAuthDialog(); return false;"><span class="desktop">Войти</span></a>
+					</li>
+									</ul>
+			</nav>
+		</div>
+	</div>
+</header>		<nav class="page__nav_container">
+	<div class="content__container">
+		<ul class="page__nav">
+										<li class="navigation_btn mobile-only">
+	<a href="/cabinet" class="link" title="Личный кабинет">
+		<div class="icon cabinet"></div>		<div class="title">Личный кабинет</div>			</a>
+</li>
+						<li class="navigation_btn">
+	<a href="/search" class="link" title="Поиск торгов">
+		<div class="icon search"></div>		<div class="title">Поиск торгов</div>			</a>
+</li>
+			<li class="navigation_btn">
+	<a href="/page/user-manuals" class="link" title="Руководства">
+		<div class="icon manuals"></div>		<div class="title">Руководства</div>			</a>
+</li>
+			<li class="navigation_btn">
+	<a href="/news" class="link" title="Новости">
+		<div class="icon news"></div>		<div class="title">Новости</div>			</a>
+</li>
+			<li class="navigation_btn">
+	<a href="/page/accreditation" class="link" title="Аккредитация в СРО">
+		<div class="icon accreditation"></div>		<div class="title">Аккредитация в СРО</div>			</a>
+</li>
+			<li class="navigation_btn">
+	<a href="/page/tarifs" class="link" title="Тарифы">
+		<div class="icon tarifs"></div>		<div class="title">Тарифы</div>			</a>
+</li>
+			<li class="navigation_btn">
+	<a href="/page/contacts" class="link" title="Контакты">
+		<div class="icon contacts"></div>		<div class="title">Контакты</div>			</a>
+</li>
+			<li class="navigation_btn">
+	<a href="/faq" class="link" title="Ответы на вопросы">
+		<div class="icon faq"></div>		<div class="title">Ответы на вопросы</div>			</a>
+</li>
+					</ul>
+	</div>
+</nav>		<main class="main__container">
+						<script defer>
+				function checkMainSearch() {
+					var btn = $(".searchMainForm:visible button[type=submit]");
+					if ($(".searchMainForm:visible .search-text-input:visible").val()) {
+						jsonData = {lots: $(".search-text-input:visible").val()};
+						base64 = Base64.encode(JSON.stringify(jsonData));
+						base64 = base64.replace(/=+$/, '');
+						btn.attr("disabled", true);
+						$(".searchMainForm:visible input[name=q]").val(base64);
+						return true;
+					}
+					$(".search-text-input:visible").focus();
+					return false;
+				}
+			</script>
+			<div itemscope itemtype="https://schema.org/WebSite">
+				<link itemprop="url" href="https://m-ets.ru/"/>
+				<form id="main_search" class="searchMainForm" action="/search" onsubmit="return checkMainSearch();" itemprop="potentialAction" itemscope itemtype="https://schema.org/SearchAction">
+					<input type="hidden" name="q" value=""/>
+					<div class="content__container search_page">
+						<div class="search-input-container">
+							<div class="search-text-input-container">
+								<div class="search-text-input-icon"></div>
+								<meta itemprop="target" content="https://m-ets.ru/search?lots={lots}"/>
+								<input itemprop="query-input" class="search-text-input" type="text" placeholder="Название, собственник или номер торгов..." />
+							</div>
+							<button type="submit" class="search-submit">Найти</button>
+						</div>
+					</div>
+				</form>
+			</div>
+						<div class="content__container">
+				
+							</div>
+			<!-- start content -->
+<div class="content__container">
+	<h1 class="content-title">Страница не найдена</h1>
+	<center class="commontable">
+		<div class="block_404">
+			<div class="error_text">404</div>
+		</div>
+		<div class="subtitle_404">Запрашиваемая страница не найдена. Возможно она была удалена <br>или Вы воспользовались неправильной ссылкой.</div>
+		<br><a href="/" class="btn" style="text-transform: uppercase">Вернуться на главную</a>
+	</center>
+</div>
+			<!-- end content -->
+		</main>
+		<footer>
+			<div class="content__container">
+				<div class="page__footer_container">
+					<a class="footer__link logo" href="/">
+						<img alt="logo" src="/css/blue/images/logo-white.svg"/>
+					</a>
+					<div class="mobile-footer__contact_links mobile-only">
+						<a class="phone  footer__link" href="tel:88005557001">8 800 555 7001</a>
+						<a class="email footer__link" href="mailto:mail@m-ets.ru">mail@m-ets.ru</a>
+					</div>
+					<nav class="footer__nav">
+						<ul>
+							<li>
+								<a class="footer__link" href="/page/register">Подключение к системе</a>
+							</li>
+							<li>
+								<a class="footer__link" href="/search">Поиск торгов</a>
+							</li>
+							<li>
+								<a class="footer__link" href="/page/user-manuals">Руководства</a>
+							</li>
+							<li>
+								<a class="footer__link" href="/news">Новости</a>
+							</li>
+						</ul>
+						<ul>
+							<li>
+								<a class="footer__link" href="/page/accreditation">Аккредитация в СРО</a>
+							</li>
+							<li>
+								<a class="footer__link" href="/page/tarifs">Тарифы</a>
+							</li>
+							<li>
+								<a class="footer__link" href="/page/contacts">Контакты</a>
+							</li>
+							<li>
+								<a class="footer__link" href="/faq">Ответы на вопросы</a>
+							</li>
+						</ul>
+					</nav>
+					<div class="footer__contact_container" itemscope itemtype="https://schema.org/Organization">
+						<a style="display: none" class="footer__link" href="/sitemap">Карта сайта</a>
+						<div class="footer__link_container">
+							<div class="footer__social_links">
+								<a class="footer__link social_link ui-icons icon-rutube" target="_blank" href="https://rutube.ru/channel/25269341/" rel="nofollow" aria-label="rutube"></a>
+								<a class="footer__link social_link ui-icons icon-vk" target="_blank" href="https://vk.com/etpmets" rel="nofollow" aria-label="VK"></a>
+								<a class="footer__link social_link ui-icons icon-max" target="_blank" href="https://max.ru/id5751039346_biz" rel="nofollow" aria-label="max"></a>
+							</div>
+							<div class="footer__contact_links">
+								<a class="footer__link" href="tel:88005557001"><span itemprop="telephone">8 800 555 7001</span></a>
+								<a class="footer__link" href="mailto:mail@m-ets.ru"><span itemprop="email">mail@m-ets.ru</span></a>
+							</div>
+						</div>
+						<div class="footer__link_container">
+							<div class="footer__legal_link">
+								<a class="footer__link" href="/page/legal">Правовая информация</a>
+							</div>
+							<div class="footer__contact">
+								<div itemprop="address" itemscope itemtype="https://schema.org/PostalAddress">
+									<span itemprop="postalCode">302023</span>,
+									<span itemprop="addressLocality">Россия, г. Орел</span>,
+									<span itemprop="streetAddress">ул. Раздольная, д. 11, пом. 137</span>
+								</div>
+								© 2010 - 2026 <span itemprop="name" >ООО «МЭТС»</span>
+							</div>
+						</div>
+					</div>
+					<div class="footer__links_contract">
+						Используя сайт вы подтверждаете <a class="footer__link" href="/static/persdata.doc">согласие на обработку персональных данных</a> и <a class="footer__link" href="/static/politika_konf.pdf">политику конфиденциальности</a> ООО «МЭТС» 
+					</div>
+				</div>
+			</div>
+		</footer>
+				<!-- Yandex.Metrika counter -->
+		<script type="text/javascript" >
+		   (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+		   m[i].l=1*new Date();
+		   for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+		   k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+		   (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+
+		   ym(32572190, "init", {
+			clickmap:true,
+			trackLinks:true,
+			accurateTrackBounce:true
+		   });
+		</script>
+		<noscript><div><img src="https://mc.yandex.ru/watch/32572190" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+		<!-- /Yandex.Metrika counter -->
+											<style>
+	.chat__container{
+		position: fixed;
+		bottom: 60px;
+		right: 60px;
+		width: 96px;
+		height: 96px;
+		box-sizing: border-box;
+		border-radius: 50%;
+		box-shadow: 0px 4px 40px rgba(0, 0, 0, 0.15);
+		z-index: 999;
+		overflow: hidden;
+		transition: 0.25s;
+		transition-delay: 0.25s;
+	}
+	.chat__container:has(.chat_toggle_button:hover) {
+		box-shadow: 0px 4px 40px rgba(0, 0, 0, 0.25);
+	}
+	
+	.chat__container.active{
+		bottom: 0px;
+		right: 0px;
+		width: 350px;
+		height: 430px;
+		border-radius: 6px 0px 0px 0px;
+		transition-delay: 0s;
+	}
+	.chat__container_header{
+		position: relative;
+		top: 0px;
+		left: 0px;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		width: 96px;
+		width: 100%;
+		height: 96px;
+		height: 100%;
+		background-color: #0354DD;
+		transition: 0.25s;
+		transition-delay: 0s;
+	}
+	.chat_toggle_button{
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		width: 96px;
+		height: 96px;
+		cursor: pointer;
+		position: relative;
+		transition: 0.25s;
+	}
+	.chat__container .chat_toggle_button:after{
+		content: "";
+		display: block;
+		position: absolute;
+		top: 50%;
+		width: 35px;
+		height: 35px;
+		background-image: url(/css/blue/images/ui-icons.svg);
+		background-repeat: no-repeat;
+		background-position: -735px -35px;
+		background-size: 3500px 175px;
+		transition: 0.25s;
+		margin-top: -17.5px;
+		
+								margin-left: -17.5px;
+		right: auto;
+		left: 50%;
+	}
+	.chat__container.active .chat__container_header,
+	.chat__container.active .chat_toggle_button{
+		width: 350px;
+		height: 40px;
+		transition-delay: 0.25s;
+	}
+	.chat__container.active .chat_toggle_button:after{
+		
+		width: 24px;
+		height: 24px;
+		background-position: -504px -24px;
+		background-size: 2400px 120px;
+		margin-top: -12px;
+		
+						margin-left: 10px;
+		right: auto;
+		left: 0%;
+	}
+	.chat__container.active .chat_toggle_button .title{
+		/*display: block;*/
+		opacity: 1;
+		transition-delay: 0.5s;
+	}
+	
+	
+	.chat__container .chat_toggle_button .chat_close_button{
+		opacity: 0;
+		position: absolute;
+		display: inline-block;
+		top: 48%;
+		transform: translateY(-50%);
+		transform-origin: center;
+		width: 24px;
+		height: 24px;
+		user-select: none;
+		cursor: pointer;
+		transition: all 0.25s;
+		transition-delay: 0.3s;
+
+		
+		right: auto;
+		left: 50%;
+	}
+	
+	.chat__container.active .chat_toggle_button .chat_close_button{
+		/*display: block;*/
+		opacity: 1;
+		
+		left: auto;
+		right: 0;
+		margin-right: 10px;
+		
+		&:hover {
+			opacity: .7;
+		}
+
+		span {
+			position: absolute;
+			height: 2.5px;
+			width: 24px;
+			background: white;
+			top: 50%;
+			transform: translateY(-50%);
+			left: 0;
+			margin: 0;
+			transform-origin: center;
+			transition: background-color .3s;
+		}
+
+		span:nth-child(1) {
+			transform: rotate(-45deg);
+		}
+		span:nth-child(2) {
+			transform: rotate(45deg);
+		}
+	}
+
+	.chat__container .chat_toggle_button .title{
+		font-family: "Segoe UI", 'Inter';
+		font-weight: 600;
+		font-size: 18px;
+		display: block;
+		padding-right: 35px;
+		color: #FFF;
+		overflow: hidden;
+		white-space: nowrap;
+		transition-delay: 0s;
+		opacity: 0;
+	}
+
+	.chat__container .chat__container_body{
+		border:solid 2px #0354DD;
+		border-top-width: 0px;
+		background-color: #FFF;
+		display: flex;
+		flex-direction: column;
+		border-bottom: 0px;
+		height: 0px;
+		transition: 0.5s;
+		transition-delay: 0.25s;
+		background-color: #f5f6f9;
+		overflow: hidden;
+	}
+	.chat__container.active .chat__container_body{
+		height: 390px;
+		position: relative;
+		transition: 0.25s;
+		transition-delay: 0.25s;
+	}
+	.messager {
+		min-height: 0px;
+		box-shadow: 0px 0px 3px 0px #c0c0c0;
+		flex-shrink: 0;
+		height: 0px;
+		max-height: 250px;
+		display: flex;
+		box-sizing: border-box;
+		background-color: #FFF;
+		flex-direction: column;
+		overflow: hidden;
+		padding: 0px;
+		transition: 0.25s;
+	}
+	.chat__container.active .messager{
+		height: auto;
+		min-height: 50px;
+		padding: 10px;
+	}
+	.chat__container.notrans .chat__container_body {
+		transition: none;
+	}
+
+
+	.chat__container_body .chat_body .simplebar-content{
+		display: flex;
+		flex-direction: column;
+	}
+	.chat__container_body .chat_sender{
+		max-height: 180px;
+		display: flex;
+	}
+	.chat__container_body .chat_sender .sender_text_wrapper{
+		flex-grow: 1;
+		display: flex;
+		align-items: center;
+	}
+	.chat__container_body .chat_sender .sender_text_wrapper .sender_input{
+		width: 100%;
+		word-break: break-all;
+		outline: none;
+		overflow-y: auto;
+		max-height: 100%;
+		font-size: 14px;
+		border: solid 1px #f0f0f0;
+		padding: 5px;
+		height: auto;
+		min-height: 28px;
+		overflow-y: scroll;
+		scrollbar-width: none; /* Firefox */
+		-ms-overflow-style: none;  /* Internet Explorer 10+ */
+	}
+	.chat__container_body .chat_sender .sender_text_wrapper .sender_input::-webkit-scrollbar {
+		width: 0;
+	}
+	.chat__container_body .chat_sender .send_btn{
+		width: 30px;
+		height: 30px;
+		border-radius: 50%;
+		background-image: linear-gradient(to bottom, #5b85f1, #2c4fa1);
+		position: relative;
+		cursor: pointer;
+		margin-top: auto;
+		margin-left: 10px;
+		flex-shrink: 0;
+	}
+	.chat__container_body .chat_body .message .cm_footer{
+		color: #7f7f7f;
+		font-size: 10px;
+		text-align: right;
+		position: relative;
+		bottom: -5px;
+	}
+	.chat__container_body .chat_body .message.my .cm_footer{
+		color: #FFF;
+		padding-right: 15px;
+	}
+	.chat__container_body .chat_body .message.my .cm_footer:before{
+		content: "✓";
+		display: block;
+		position: absolute;
+		top: -2px;
+		font-size: 10px;
+		right: 3px;
+	}
+	.chat__container_body .chat_body .message.my.read .cm_footer:after{
+		content: "✓";
+		display: block;
+		position: absolute;
+		top: -2px;
+		font-size: 10px;
+		right: 0px;
+	}
+	.chat__container_body .chat_sender .send_btn:before{
+		content: "";
+		position: absolute;
+		display: block;
+		width: 14px;
+		height: 14px;
+		left: 8.5px;
+		top: 8.5px;
+		background-image: url(/css/darkblue/images/bg-sender-btn.svg);
+		background-position: center;
+		background-repeat: no-repeat;
+		background-size: 14.02px 12.36px
+	}
+	.chat__container_body .chat_body{
+		display: flex;
+		flex-direction: column;
+		padding: 10px 25px 10px 20px;
+		overflow-y: scroll;
+		flex-grow: 1;
+		margin-right: 2px;
+		scrollbar-width: none; /* Firefox */
+		-ms-overflow-style: none;  /* Internet Explorer 10+ */
+	}
+	.chat__container_body .chat_body::-webkit-scrollbar { /* WebKit */
+		width: 0;
+		height: 0;
+	}
+
+	.chat__container_body .chat_body .message{
+		font-size: 14px;
+		color: #4D4D4D;
+		background-color: #fff;
+		min-width: 100px;
+		min-height: 30px;
+		border-radius: 5px 5px 5px 0px;
+		margin-right: auto;
+		flex-shrink: 0;
+		padding: 10px 15px;
+		box-sizing: border-box;
+		box-shadow: 0 0 15px 0px rgba(36,75,174,0.2);
+		position: relative;
+		margin-left: 0px;
+		max-width: 100%;
+		word-wrap: anywhere;
+	}
+	.chat__container_body .chat_body .message:before{
+		content: "";
+		display: block;
+		position: absolute;
+		width: 0px;
+		height: 0px;
+		border-style: solid;
+		border-width: 10px;
+		border-color: transparent;
+		border-bottom-color: #FFF;
+		bottom: 0px;
+		left: -10px;
+	}
+	.chat__container_body .chat_body .message.my:before{
+		right: -10px;
+		bottom: 0px;
+		left: unset;
+		border-left-color: transparent;
+		border-bottom-color: #2c4fa1;
+	}
+	.chat__container_body .chat_body .message .cm_header{
+		color: #7f7f7f;
+		margin-bottom: 5px;
+
+	}
+	.chat__container_body .chat_body .message.system {
+		background-color: transparent;
+		box-shadow: none;
+		color: #527add;
+		margin-left: auto;
+		margin-right: auto;
+	}
+	.chat__container_body .chat_body .message.system:before{
+		display: none;
+	}
+	.chat__container_body .chat_body .message.system a {
+		text-decoration: underline;
+	}
+
+
+	.chat__container_body .chat_body .message:not(:first-child){
+		margin-top: 20px;
+	}
+	.chat__container_body .chat_body .message.my{
+		border-radius: 5px 5px 0px 5px;
+		background-image: linear-gradient(to top, #2c4fa1 0%, #2c4fa1 30%, #5b85f1 100%);
+		background-color: #5b85f1;
+		color: #FFF;
+		margin-left: auto;
+		margin-right: 0px;
+	}
+	.chat__container_body .chat_body .message.my a{
+		color: #FFF;
+	}
+
+	.chat_body .simplebar-track{
+		opacity: 0;
+		transition: 0.5s;
+	}
+	.chat_body:hover .simplebar-track{
+		opacity: 1;
+	}
+	.file-dragdrop-container{
+		position: absolute;
+		left: 0px;
+		top: 0px;
+		width: 100%;
+		height: 100%;
+		background-color: rgba(0,0,0, 0.4);
+		z-index: 2;
+		padding: 20px 20px 70px 20px;
+		box-sizing: border-box;
+		display: none;
+	}
+	.file-drop-area{
+		width: 100%;
+		height: 100%;
+		background-color: rgba(255,255,255,0.7);
+		border-radius: 5px;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+	.fda-title {
+		font-size: 22px;
+		color: #606060;
+	}
+	.cm_body {
+		white-space: pre-wrap;
+	}
+
+	.chat_send_file {
+		display: flex;
+		width: 300px;
+		height: auto;
+		padding: 5px;
+		border: solid 1px #f0f0f0;
+		/**margin-bottom: 5px;**/
+		position: relative;
+		margin-top: 5px;
+	}
+	.chat_send_file:last-child{
+		margin-bottom: 5px;
+	}
+	.icon_container{
+		flex-shrink: 0;
+		width: 32px;
+		height: 32px;
+	}
+
+	.messager-files-container .icon {
+		width: 100%;
+		height: 100%;
+		background-repeat: no-repeat;
+		background-image: url("css/darkblue/images/icon-files.svg");
+		background-size: 320px 32px;
+		background-position: left -288px center;
+	}
+	.messager-files-container .icon.word {
+		background-position-x: -32px;
+	}
+	.messager-files-container .icon.png {
+		background-position-x: -127px;
+	}
+	.messager-files-container .icon.jpeg {
+		background-position-x: -158px;
+	}
+	.messager-files-container{
+		display: flex;
+		flex-wrap: wrap;
+		max-height: 200px;
+		overflow: auto;
+	}
+	.chat_send_file .file_body {
+		flex-grow: 1;
+		padding-left: 5px;
+		display: flex;
+		flex-direction: column;
+	}
+	.chat_send_file .close_btn {
+		position: absolute;
+		top: -4px;
+		right: -6px;
+		width: 12px;
+		height: 12px;
+		border-radius: 50%;
+		background-color: #f0f0f0;
+		display: none;
+		background-image: url(css/darkblue/images/icon-close_white_no_opacity.svg);
+		background-position: center;
+		background-repeat: no-repeat;
+		background-size: 6px 6px;
+	}
+	.chat_send_file .close_btn:hover{
+		background-color: #b0b0b0;
+		cursor: pointer;
+	}
+	.chat_send_file:hover .close_btn{
+		display: block;
+	}
+	.chat_send_file .title {
+		width: 100%;
+		overflow: hidden;
+		white-space: nowrap;
+		max-width: 255px;
+		text-overflow: ellipsis;
+	}
+	.chat_send_file .file_info {
+		color: #c0c0c0;
+		font-size: 8px;
+		margin-top: auto;
+	}
+	@media screen and (max-width: 1439px) {
+		.chat__container{
+			bottom: 30px;
+			right: 30px;
+			width: 52px;
+			height: 52px;
+		}
+		.chat_toggle_button{
+			width: 52px;
+			height: 52px;
+		}
+		.chat__container .chat_toggle_button::after{
+			width: 24px;
+			height: 24px;
+			margin-top: -12.5px;
+			margin-left: -12.5px;
+			background-position: -504px -24px;
+			background-size: 2400px 120px;
+		}
+	}
+</style>
+<script defer>
+	toDateTimeFormat = function (datestring, format) {
+		try {
+			var date = new Date(datestring);
+		} catch (e) {
+			return "";
+		}
+		return date.format(format, "");
+	};
+	getMessageClass = function (type_id) {
+		switch (type_id) {
+			case 1:
+				return "user";
+			case 2:
+				return "operator";
+			case 3:
+				return "system";//op_connected
+			case 4:
+				return "system";//op_disconnected
+			case 5:
+				return "user";//guest
+			case 6:
+				return "system";//system message - inform
+			default:
+				return "other";
+		}
+		/*
+		 * 1	user	сообщение пользователя
+		 2	operator	сообщение оператора
+		 3	op_connected	оператор подключился
+		 4	op_disconnected	оператор отключился
+		 5	guest	сообщение гостя
+		 
+		 */
+	};
+	
+	/**
+	* Функция для общей валидации строки на список разрешенных символов
+	* @param {String} text - строка, которую нужно проверить
+	* @returns {undefined}
+	*/
+       function filterText(text) {
+	       if (!text) {
+		       return text;
+	       }
+
+		//	// Удаление начальных и конечных пробелов
+		//	text = text.trim();
+		//
+		//	// Замена 3+ переносов строк на 2
+		//	text = text.replace(/\n{3,}/g, '\n\n');
+
+	       // Разрешены: буквы, цифры, определенные символы + пробел + \n
+	       //const allowedCharsRegex = /[^A-Za-zА-Яа-яЁё0-9!@#$%^&*()_+=\[\]{}|;:'",.<>/?`~\\ \-\n]/g;
+	       
+	       const allowedCharsRegex = /[^A-Za-zА-Яа-яЁё0-9!@#$%^&*()_+=\[\]{}|;:«»₽'",.<>/?`~\\ \-\n]/g;
+	       
+	       //console.log(allowedCharsRegex, 'allowedCharsRegex')
+
+	       text = text.replace(allowedCharsRegex, '');
+	       return text;
+       }
+	
+	
+	jQuery(document).ready(function () {
+
+		var titleTimer;
+		var titleOrig = null;
+		function chatBlinkTitle() {
+			if (!localStorage.getItem("chatHasNewMessage")) {
+				return;
+			}
+			if (!titleOrig) {
+				titleOrig = document.title;
+			}
+			titleTimer = setInterval(titleSwitch, 1000);
+		}
+
+		function chatStopBlinkTitle() {
+			if (titleTimer) {
+				clearInterval(titleTimer);
+			}
+			localStorage.removeItem("chatHasNewMessage");
+			if (titleOrig) {
+				document.title = titleOrig;
+			}
+		}
+
+		function titleSwitch() {
+			if (!localStorage.getItem("chatHasNewMessage")) {
+				chatStopBlinkTitle();
+				return;
+			}
+
+			if (document.title === titleOrig) {
+				document.title = "💬 Новое сообщение!";
+			} else {
+				document.title = titleOrig;
+			}
+			console.log("TITLE", document.title);
+		}
+
+		function documentFocused() {
+			console.log("FOCUESF!");
+			var message_id = $(".chat__container_body .message.operator").last().attr("data-message_id");
+			if (message_id) {
+				tab.send({action: 'chatSetSeen', data: {message_id: message_id}});
+			}
+			chatStopBlinkTitle();
+		}
+
+		document.addEventListener("visibilitychange", function () {
+			if (document.visibilityState === 'visible') {
+				documentFocused();
+			} else {
+				console.log("HIDDEE!");
+			}
+		});
+
+		createHtmlMessage = function (message) {
+			var message_container = document.createElement('div');
+			message_container.classList.add('message');
+			if (message.type_id == 1) {
+				message_container.classList.add('my');
+			}
+			message_container.classList.add(getMessageClass(message.type_id));
+			message_container.dataset["message_id"] = message.id;
+			if (typeof message.seen_at !== "undefined" && message.seen_at !== null) {
+				message_container.classList.add('read');
+			}
+
+			var message_body = document.createElement('div');
+			message_body.classList.add('cm_body');
+			var message_text = message.content;
+			
+			//Урлы без протокола
+			message_text = message_text.replace(/(^|\ )((m\-ets\.ru|mets\.ru)([\/\w-\\=\#\&\?]*)*\/?)/gi, '$1<a href="http://$2" target="_blank">$2</a>');
+			//Урлы с протоколом
+			message_text = message_text.replace(/(^|\ )((https?:\/\/)(m\-ets\.ru|mets\.ru)([\/\w-\\=\#\&\?]*)*\/?)/gi, '$1<a href="$2" target="_blank">$2</a>');
+			//Почта
+			message_text = message_text.replace(/(([\da-z\.-]+)\@([\da-z-]+)\.([a-z]{2,6}))/gi, '<a href="mailto:$1" target="_blank">$1</a>');
+			//Торги
+			message_text = message_text.replace(/([0-9]{4,6})-([а-яА-Я]{4})/gi, '<a href="/$1-1" target="_blank">$1-$2</a>');
+			if (message.type_id === 2){
+				//только в сообщениях от оператора
+				//Все ссылки
+				message_text = message_text.replace(/(^|\ )(https?:\/\/[^\s]+)/gi, '$1<a href="$2" target="_blank">$2</a>');
+			}
+			
+			//message_text = message_text.replace(/((https?:\/\/)?(m\-ets\.ru|mets\.ru)([\/\w\.-\\#\&]*)*\/?)/gi, '<a href="$1" target="_blank">$1</a>');
+			//message_text = message_text.replace(/(([\da-z\.-]+)\@([\da-z\.-]+)\.([a-z\.]{2,6}))/gi, '<a href="mailto:$1" target="_blank">$1</a>');
+			//message_text = message_text.replace(/([0-9]{4,6})-([а-яА-Я]{4})/gi, '<a href="/search?lots=$1" target="_blank">$1-$2</a>');
+			message_body.innerHTML = message_text;
+			message_container.appendChild(message_body);
+			if (message.type_id !== 3) {
+				var message_footer = document.createElement('div');
+				message_footer.classList.add('cm_footer');
+				message_footer.innerHTML = toDateTimeFormat(message.created_at, "HH:MM");
+				message_container.appendChild(message_footer);
+			}
+			return message_container;
+		};
+
+		function chatGotMessage(data) {
+			if (document.hidden) {
+				//мигаем иконкой
+				console.log("chatHasNewMessage");
+				localStorage.setItem("chatHasNewMessage", "true");
+				setTimeout(chatBlinkTitle, 1000);
+			} else {
+				if(data.type_id == 2) {
+					//сообщение от оператора при открытом документе, говорим, что увидели
+					tab.send({action: 'chatSetSeen', data: {message_id: data.id}});
+				}
+				setTimeout(function () {
+					console.log("chatHasNewMessage remove");
+					localStorage.removeItem("chatHasNewMessage");
+				}, 500);
+			}
+			var container = $("#chat-container");
+			if (!$(container).hasClass("active") && data.type_id == 2) {
+				//чат скрыт, показываем
+								$("#chat-container .chat_toggle_button").trigger("click");
+				return;
+			}
+
+			var msg = createHtmlMessage(data);
+			$(msg).appendTo('.chat_body .simplebar-content');
+			var scrollTopMax = $('.chat_body .simplebar-content-wrapper')[0].scrollTopMax;
+			$('.chat_body .simplebar-content-wrapper').animate({scrollTop: scrollTopMax}, {duration: 700, easing: 'linear', queue: false});
+			if (tab.tabCard.is_focused) {
+				//если главная вкладка, сохраняем историю
+								var messages = loadMessages();
+				messages.push(data);
+				saveMessages(messages);
+			}
+		}
+
+		function chatGotMessages(data, nosave) {
+			dd = data;
+			console.log("GOT CHJAss",nosave, data);
+			if (!nosave) {
+				saveMessages(data.messages);
+			}
+			$('.chat_body .simplebar-content').html('');
+			for (var n in data.messages) {
+				var msg = createHtmlMessage(data.messages[n]);
+				$(msg).appendTo('.chat_body .simplebar-content');
+			}
+			$('.chat_body .simplebar-content-wrapper').scrollTop(99999999999);
+			//console.log("chatGotMessages DONE");
+		}
+
+		function chatSetSeen(data) {
+			$(".message.my:not(.read)").each(function (n, el) {
+				if ($(el).attr("data-message_id") <= data.message_id) {
+					$(el).addClass('read');
+				}
+			});
+			if (tab.tabCard.is_focused) {
+				//если главная вкладка, сохраняем историю
+				var messages = loadMessages();
+				for (var n in messages) {
+					if (messages[n].id <= data.message_id) {
+						messages[n].seen_at = (new Date()).toISOString();
+					}
+				}
+				saveMessages(messages);
+			}
+		}
+
+		function loadMessages() {
+			var messages;
+			try {
+				messages = JSON.parse(localStorage.getItem('chatMessages'));
+			} catch (e) {
+				messages = [];
+			}
+//			console.log("lm ret", messages);
+			return messages;
+		}
+
+		function saveMessages(messages) {
+			localStorage.setItem('chatMessages', JSON.stringify(messages));
+		}
+
+		$(function () {
+			tab.addHandler('chatMessage', chatGotMessage);
+			tab.addHandler('chatMessages', chatGotMessages);
+			tab.addHandler('chatSetSeen', chatSetSeen);
+			textareaAutoHeaght();
+		});
+
+		function chatSendMessage(event) {
+			var text = $(".chat_sender .sender_input").val();
+			
+			var test_text = text.trim();
+			if (test_text.length === 0) {
+				return;
+			}
+			
+			text = filterText(test_text);
+			if (text.length === 0) {
+				aAlert("Введите допустимые символы!");
+				$(".chat_sender .sender_input").val("");
+				return;
+			}
+			
+			tab.send({action: 'chatMessage', data: {text: text}});
+			$(".chat_sender .sender_input").val("").focus();
+			textareaAutoHeaght();
+			//TODO send files
+			
+			$("#chat-container .messager-files-container .chat_send_file").remove();
+		}
+
+		var chat_simplebar = new SimpleBar($('#chat-container [data-simplebar]')[0], {autoHide: true});
+
+		if (localStorage.getItem('chatOpened')) {
+//			$("#chat-container").show();
+			$("#chat-container").addClass("notrans").addClass('active').show();
+			var messages;
+			try {
+				messages = JSON.parse(localStorage.getItem('chatMessages'));
+				chatGotMessages({messages: messages}, true);
+			} catch (e) {
+
+			}
+
+			setTimeout(function () {
+				$("#chat-container").removeClass('notrans');
+			}, 0);
+		}
+		var chat_input_pasteHandler = function (e) {
+			if(typeof e.originalEvent !== "undefined"){
+				e = e.originalEvent
+			}
+			var data = e.clipboardData;
+//			console.log(e);
+			if (data) {
+				var items = data.items;
+//				console.log("items", items);
+				if (items && items.length > 0) {
+					for (var i = 0; i < items.length; i++) {
+//						console.log("item", items[i].type);
+						if (items[i].type.indexOf("image") !== -1) {
+							var blob = items[i].getAsFile();
+							var URLObj = window.URL || window.webkitURL;
+							var source = URLObj.createObjectURL(blob);
+//							_.createFile(source);
+							e.preventDefault();
+							return false;
+						} else if (items[i].type.indexOf("text/html") !== -1) {
+							items[i].getAsString(function (html) {
+								var htmlFragment = $("<div>").html(html);
+								var str = $(htmlFragment).text();
+								if ($("img", htmlFragment).length > 0) {
+									var img = $("img", htmlFragment)[0];
+									var title = img.alt;
+									var url = img.src;
+//									console.log(title, url);
+//										items[i].set
+									str = "";
+//									_.createFile(url, title);
+								}
+
+								var docFragment = document.createDocumentFragment();
+								var newEle = document.createTextNode(str);
+								docFragment.appendChild(newEle);
+								var range = window.getSelection().getRangeAt(0);
+								range.deleteContents();
+								range.insertNode(docFragment);
+								range = document.createRange();
+								range.setStartAfter(newEle);
+								range.collapse(true);
+								var sel = window.getSelection();
+								sel.removeAllRanges();
+								sel.addRange(range);
+//								_.chat_text_wrapper_simplebar.getScrollElement().scrollTop = _.chat_text_wrapper_simplebar.getScrollElement().scrollTopMax;
+							});
+							e.preventDefault();
+							return false;
+						} else if (items[i].type.indexOf("text/plain") !== -1) {
+//							_.chat_text_wrapper_simplebar.getScrollElement().scrollTop = _.chat_text_wrapper_simplebar.getScrollElement().scrollTopMax;
+						}
+					}
+				} else {
+					//TODO paste file
+
+					e.preventDefault();
+					return false;
+				}
+			}else{
+				console.log("data", false);
+			}
+		};
+		$('.chat_body .simplebar-content-wrapper').scrollTop(999999);
+
+		$("#chat-container .chat_toggle_button").on("click", function () {
+			var container = $("#chat-container");
+			$(container).toggleClass("active");
+			if ($(container).hasClass("active")) {
+				tab.send({action: 'chatGetMessages'});
+				chat_body = $(".simplebar-content-wrapper", container)[0];
+				chat_body.scrollTop = chat_body.scrollTopMax;
+				$(".sender_input", container).val("").focus();
+				localStorage.setItem('chatOpened', true);
+			} else {
+				localStorage.removeItem('chatOpened');
+			}
+		});
+		var textareaAutoHeaght = function(){
+			var textarea = $("#chat-container .sender_input")[0];
+			textarea.style.height = 'auto';
+			textarea.style.height = textarea.scrollHeight + 2 + "px";
+		}
+		$("#chat-container .send_btn").on("click", chatSendMessage);
+		$("#chat-container .sender_input").on("input", function (e) {
+			textareaAutoHeaght();
+		});
+		
+		
+		var file_dragover_timeout = null;
+		$("#chat-container .chat__container_body").on("dragover", function (e) {
+			return;
+			e.preventDefault();
+			e.stopPropagation();
+			if(file_dragover_timeout !== null){
+				clearTimeout(file_dragover_timeout);
+			}else{
+				$("#chat-container .file-dragdrop-container").show();
+			}
+			file_dragover_timeout = setTimeout(clearFileDragOwer, 100);
+		});
+		
+		var clearFileDragOwer = function(){
+			$("#chat-container .file-dragdrop-container").hide();
+			clearTimeout(file_dragover_timeout);
+			file_dragover_timeout = null;
+		}
+		
+		$("#chat-container .file-dragdrop-container").on("drop", function (e) {
+			e.stopPropagation();
+			e.preventDefault();
+			var dt = e.dataTransfer || e.originalEvent.dataTransfer;
+			var files = dt.files;
+			console.log(e, dt, files);
+			for(var i = 0; i < files.length; i++){
+				var file = files[i];
+				createFile(file);
+			}
+			return false;
+		});
+		
+		$("#chat-container .sender_input").on("keydown", function (e) {
+			if ((e.key === "Enter" || e.keycode === 13)) {
+				if (e.ctrlKey === false) {
+					e.preventDefault();
+					$("#chat-container .send_btn").click();
+					return false;
+				} else {
+					if(e.target.value === ""){
+						return false;
+					}
+					e.preventDefault();
+					var caret = e.target.selectionStart;
+					e.target.setRangeText("\n", caret, caret, "end");
+					if(caret == e.target.value.length - 1){
+						e.target.scrollTop = e.target.scrollTopMax;
+					}else{
+						e.target.scrollTop += 28;
+					}
+					textareaAutoHeaght();
+					return false;
+				}
+			}
+		});
+		//$("#chat-container .sender_input").on("paste", chat_input_pasteHandler);
+		var createFile = function (file) {
+				/*
+				 * lastModified: 1634462229830
+				 * name: "Certificate.png"
+				 * size: 684022
+				 * type: "image/png"
+				 * webkitRelativePath: ""
+				 * 
+				 */
+				var filebody = $("<div>").addClass("chat_send_file");
+				var icon_container = $("<div>").addClass("icon_container");
+				var icon = $("<div>").addClass("icon");//.css({"background-image": "url(" + source + ")"});
+				switch (file.type) {
+					case "image/png":
+						icon.addClass("png");
+					break;
+					case "image/jpeg":
+						icon.addClass("jpeg");
+					break;
+					case "application/pdf":
+						icon.addClass("pdf");
+					break;
+					case "application/msword":
+					case "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
+						icon.addClass("word");
+					break;
+					default:
+						console.log(file.type);
+					break;
+				}
+				icon_container.appendTo(filebody);
+				icon.appendTo(icon_container);
+				var body = $("<div>").addClass("file_body").appendTo(filebody);
+				var title_div = $("<div>").addClass("title").html(file.name).appendTo(body);
+				var file_info = $("<div>").addClass("file_info").html(formatBytes(file.size)).appendTo(body);
+				
+				var close_btn = $("<div>").addClass("close_btn").appendTo(body).on("click", function(e){
+					$(e.target).parents(".chat_send_file").remove();
+				});
+				body.appendTo(filebody);
+				$("#chat-container .messager-files-container").append(filebody);
+		};
+		tab.onReady = function(){
+						var chatWork = false;
+			if (!isMobile && (chatWork || localStorage.getItem('chatOpened'))) {
+				$("#chat-container").show();
+			}
+						$('.chat_body .simplebar-content-wrapper').scrollTop(99999999999);
+			textareaAutoHeaght();
+		};
+	});
+</script>
+<div class="chat__container" id="chat-container" style="display: none">
+	<div class="chat__container_header">
+		<div class="chat_toggle_button"><span class="title">отправьте нам сообщение</span>
+			<span class="chat_close_button">
+				<span></span><span></span>
+			</span>
+		</div>
+	</div>
+	<div class="chat__container_body">
+		<div class="file-dragdrop-container">
+			<div class="file-drop-area">
+				<div class="fda-title">Поместите сюда файлы</div>
+			</div>
+		</div>
+		<div class="chat_body" data-simplebar>
+		</div>
+		<div class="messager">
+			<div class="messager-files-container">
+
+			</div>
+			<div class="chat_sender">
+				<div class="sender_text_wrapper">
+					<textarea placeholder="Введите сообщение" role="textbox" class="sender_input" data-tab="9" rows="1" style="resize: none;"></textarea>
+				</div>
+				<div class="send_btn"></div>
+			</div>
+		</div>
+	</div>
+</div>
+			<div class="custom_notification__container" id="custom_notification_container" style="bottom: 40px;">
+	<div class="custom_notification_close_all_btn" style="display: none;">Закрыть все</div>
+
+</div>
+<script defer>
+	var customNotificationContainer = null;
+	var PageSound = function(){
+		var _ = this;
+		_.zip = new JSZip();
+		_.sound = null;
+		_.initSound = function () {
+			var request = new XMLHttpRequest();
+			request.open('GET', "/sounds/chat_sounds.zip", true);
+			request.responseType = 'arraybuffer';
+			request.onload = function () {
+				_.zip.loadAsync(request.response).then(function (zip) {
+					var audioContext = new AudioContext();
+					var gainNode = audioContext.createGain();
+					_.sound = {
+						audiocontext: audioContext,
+						gainNode: gainNode,
+						filename: null,
+						volume: 1,
+						s: null,
+						play: function (name) {
+							switch (name) {
+								case "sound_1":
+									_.sound.filename = "ogg/sound_1.ogg";
+									break;
+								case "sound_2":
+									_.sound.filename = "ogg/sound_2.ogg";
+									break;
+								case "sound_3":
+									_.sound.filename = "ogg/sound_3.ogg";
+									break;
+								case "sound_4":
+									_.sound.filename = "ogg/sound_4.ogg";
+									break;
+								case "sound_5":
+									_.sound.filename = "ogg/sound_5.ogg";
+									break;
+								case "sound_6":
+									_.sound.filename = "ogg/sound_6.ogg";
+									break;
+								case "sound_7":
+									_.sound.filename = "ogg/sound_7.ogg";
+									break;
+								default:
+									_.sound.filename = "ogg/sound_1.ogg";
+									break;
+							}
+
+							zip.file(_.sound.filename).async("ArrayBuffer").then(function (data) {
+								_.sound.audiocontext.decodeAudioData(data, function (buffer) {
+									_.sound.buffer = buffer;
+									_.sound.s = null;
+									_.sound.s = _.sound.audiocontext.createBufferSource();
+									_.sound.s.buffer = _.sound.buffer;
+									_.sound.s.connect(_.sound.gainNode);
+									_.sound.gainNode.connect(_.sound.audiocontext.destination);
+									_.sound.gainNode.gain.value = _.sound.volume;
+									_.sound.s.loop = false;
+									_.sound.s.start(0);
+								});
+
+							});
+
+						}
+					};
+				});
+			};
+			request.send();
+		};
+			}
+	var generateUUID = function () {
+		var d = new Date().getTime();
+		var d2 = ((typeof performance !== 'undefined') && performance.now && (performance.now() * 1000)) || 0;
+		return 'xxxxxxxx-xxxx-yyyy-yyyyy-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+			var r = Math.random() * 16;
+			if (d > 0) {
+				r = (d + r) % 16 | 0;
+				d = Math.floor(d / 16);
+			} else {
+				r = (d2 + r) % 16 | 0;
+				d2 = Math.floor(d2 / 16);
+			}
+			return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+		});
+	}
+
+	var CustomNotificationAndShow = function (title, message, url, icon) {
+		var notification = new CustomNotification(title, message, url, icon);
+		customNotificationContainer.addNotification(notification, true);
+		return notification;
+	};
+
+	var CustomNotification = function (title, message, url, icon) {
+		var _ = this;
+		_.innerHTML = null;
+		_.title = title;
+		_.url = url;
+		_.message = message;
+		_.icon = icon;
+		_.uuid = generateUUID();
+
+		_.init = function () {
+			_.createHtml();
+		};
+		_.createHtml = function () {
+			var notificationContainer = document.createElement('div');
+			notificationContainer.classList.add('custom-notification');
+
+			if (typeof _.icon !== "undefined" && _.icon !== null) {
+				var iconContainer = document.createElement('div');
+				iconContainer.classList.add('cn-icon-container');
+				notificationContainer.appendChild(iconContainer);
+
+				var iconImage = document.createElement('div');
+				iconImage.classList.add('cn-icon-image');
+				iconImage.style.backgroundImage = "url(" + _.icon + ")";
+				iconContainer.appendChild(iconImage);
+			}
+
+			var bodyContainer = document.createElement('div');
+			bodyContainer.classList.add('cn-body-container');
+			notificationContainer.appendChild(bodyContainer);
+
+			var bodyHeader = document.createElement('div');
+			bodyHeader.classList.add('cn-body-header');
+			bodyContainer.appendChild(bodyHeader);
+
+			var bodyHeaderTitle = document.createElement('div');
+			bodyHeaderTitle.classList.add('cn-body-header-title');
+			bodyHeaderTitle.innerHTML = _.title;
+			bodyHeader.appendChild(bodyHeaderTitle);
+
+			var bodyHeaderCloseBtn = document.createElement('div');
+			bodyHeaderCloseBtn.classList.add('cn-body-header-close-btn');
+			bodyHeaderCloseBtn.addEventListener("click", _.onClose);
+			bodyHeader.appendChild(bodyHeaderCloseBtn);
+
+			var bodyContent = document.createElement('div');
+			bodyContent.classList.add('cn-body-content');
+			if (typeof _.message !== "undefined" && _.message !== null) {
+				bodyContent.innerHTML = _.message;
+			}
+			bodyContainer.appendChild(bodyContent);
+
+			var bodyFooter = document.createElement('div');
+			bodyFooter.classList.add('cn-body-footer');
+			if (typeof _.url !== "undefined" && _.url !== null) {
+//				var a = document.createElement('a');
+//				a.href = url;
+//				a.innerHTML = url;
+//				bodyFooter.appendChild(a);
+			}
+			bodyContainer.appendChild(bodyFooter);
+
+			notificationContainer.addEventListener('click', _.onClick);
+			_.innerHTML = notificationContainer;
+			return notificationContainer;
+		};
+		_.onClick = function (event) {
+			var target = event.target;
+			if ($(target).hasClass("cn-body-header-close-btn")) {
+				return;
+			}
+			if (typeof _.url !== "undefined" && _.url !== null) {
+				window.open(url, '_blank').focus();
+				_.close(event);
+			}
+
+		};
+		_.close = function (event) {
+			_.onClose(event);
+		};
+		_.onClose = function (event) {
+			let custom_event = new CustomEvent("closeCustomNotification", {
+				detail: {originalEvent: event,
+					notificationObject: _
+				}
+			});
+			window.dispatchEvent(custom_event);
+		};
+		_.init();
+		return _;
+	};
+	var CustomNotificationContainer = function () {
+		var _ = this;
+		_.innerHTML = null;
+		_.messageCollection = {};
+		_.zip = new JSZip();
+		_.sound = null;
+		_.init = function () {
+			_.innerHTML = $("#custom_notification_container")[0];
+						jQuery(".custom_notification_close_all_btn").on("click", _.closeAllNotification);
+		};
+		_.initSound = function () {
+			var request = new XMLHttpRequest();
+			request.open('GET', "/sounds/chat_sounds.zip", true);
+			request.responseType = 'arraybuffer';
+			request.onload = function () {
+				_.zip.loadAsync(request.response).then(function (zip) {
+					var audioContext = new AudioContext();
+					var gainNode = audioContext.createGain();
+					_.sound = {
+						audiocontext: audioContext,
+						gainNode: gainNode,
+						filename: null,
+						volume: 1,
+						s: null,
+						play: function (name) {
+							switch (name) {
+								case "sound_1":
+									_.sound.filename = "ogg/sound_1.ogg";
+									break;
+								case "sound_2":
+									_.sound.filename = "ogg/sound_2.ogg";
+									break;
+								case "sound_3":
+									_.sound.filename = "ogg/sound_3.ogg";
+									break;
+								case "sound_4":
+									_.sound.filename = "ogg/sound_4.ogg";
+									break;
+								case "sound_5":
+									_.sound.filename = "ogg/sound_5.ogg";
+									break;
+								case "sound_6":
+									_.sound.filename = "ogg/sound_6.ogg";
+									break;
+								case "sound_7":
+									_.sound.filename = "ogg/sound_7.ogg";
+									break;
+								default:
+									_.sound.filename = "ogg/sound_1.ogg";
+									break;
+							}
+
+							zip.file(_.sound.filename).async("ArrayBuffer").then(function (data) {
+								_.sound.audiocontext.decodeAudioData(data, function (buffer) {
+									_.sound.buffer = buffer;
+									_.sound.s = null;
+									_.sound.s = _.sound.audiocontext.createBufferSource();
+									_.sound.s.buffer = _.sound.buffer;
+									_.sound.s.connect(_.sound.gainNode);
+									_.sound.gainNode.connect(_.sound.audiocontext.destination);
+									_.sound.gainNode.gain.value = _.sound.volume;
+									_.sound.s.loop = false;
+									_.sound.s.start(0);
+								});
+
+							});
+
+						}
+					};
+				});
+			};
+			request.send();
+		};
+		_.showCloseAllBtn = function(){
+			console.log("showCloseAllBtn");
+			jQuery(".custom_notification_close_all_btn").show();
+		}
+		_.hideCloseAllBtn = function(){
+			console.log("hideCloseAllBtn");
+			jQuery(".custom_notification_close_all_btn").hide();
+		}
+		_.closeAllNotification = function(){
+			jQuery.each(_.messageCollection, _.removeNotification);
+		}
+		_.addNotification = function (notification, play_sound) {
+			_.messageCollection[notification.uuid] = notification;
+			if(Object.keys(_.messageCollection).length > 1){
+				_.showCloseAllBtn();
+			}else{
+				_.hideCloseAllBtn();
+			}
+			_.innerHTML.appendChild(notification.innerHTML);
+						localStorage.setItem("custom_notification_messages", JSON.stringify(_.messageCollection));
+		};
+		_.removeNotification = function (notification) {
+			if(typeof notification !== "object"){
+				notification = _.messageCollection[notification];
+			}
+			console.log("removeNotification", typeof notification);
+			_.innerHTML.removeChild(notification.innerHTML);
+			delete _.messageCollection[notification.uuid];
+			if(Object.keys(_.messageCollection).length < 2){
+				_.hideCloseAllBtn();
+			}else{
+				_.showCloseAllBtn();
+			}
+			localStorage.setItem("custom_notification_messages", JSON.stringify(_.messageCollection));
+		};
+		_.getNotification = function (notification) {
+			return _.messageCollection[notification.uuid];
+		};
+		_.refreshNotifications = function (localStorageNotifications) {
+			Object.keys(_.messageCollection).forEach(function (key) {
+				if (!localStorageNotifications.hasOwnProperty(key)) {
+					_.removeNotification(_.messageCollection[key]);
+				} else {
+					delete localStorageNotifications[key];
+				}
+			});
+			Object.keys(localStorageNotifications).forEach(function (key) {
+				var notification = new CustomNotification(localStorageNotifications[key].title, localStorageNotifications[key].message, localStorageNotifications[key].url, localStorageNotifications[key].icon);
+				notification.uuid = localStorageNotifications[key].uuid;
+				_.addNotification(notification);
+			});
+
+		};
+		_.init();
+		return _;
+	};
+
+
+	window.addEventListener("closeCustomNotification", function (event) {
+		var n = event.detail.notificationObject;
+		customNotificationContainer.removeNotification(n);
+	});
+	window.addEventListener('storage', function (event) {
+		if (event.key === "custom_notification_messages") {
+			var messages = JSON.parse(localStorage.getItem("custom_notification_messages"));
+			customNotificationContainer.refreshNotifications(messages);
+		}
+	});
+	jQuery(document).ready(function () {
+		pageSound = new PageSound();
+		customNotificationContainer = new CustomNotificationContainer();
+		if (localStorage.hasOwnProperty("custom_notification_messages")) {
+			var messages = JSON.parse(localStorage.getItem("custom_notification_messages"));
+			customNotificationContainer.refreshNotifications(messages);
+		}
+			});
+</script>				<style>
+	a[disabled] {
+		pointer-events: none;
+	}
+	@media screen and (max-width: 720px) {
+		.search-text-select {
+			max-height: none;
+		}
+	}
+	
+		.newyear .fixed-clock {
+		top: 110px !important;
+		border-top:  solid 1px #CCD4DB;
+		border-top-left-radius: 6px;
+	}
+
+</style>
+<script>
+
+</script>
+		
+				
+			</body>
+</html>
