@@ -39,7 +39,6 @@ class Source(BaseSource):
                         "category_id": CATEGORY_ID,
                         "items_per_page": 100},
                 timeout=25,
-                proxies=self.proxies(),
             )
             self.debug_dump(self.name, resp.text)
             if resp.status_code in (403, 429):
@@ -103,3 +102,4 @@ class Source(BaseSource):
                 description=text[:800],
             ))
         return out
+      
