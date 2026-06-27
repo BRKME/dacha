@@ -14,7 +14,10 @@ from base import BaseSource, Listing, SourceResult, SourceStatus
 UA = ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
       "(KHTML, like Gecko) Chrome/124.0 Safari/537.36")
 
-SEARCH_URL = "https://alfalot.ru/lots/"   # каркас; реальный путь/параметры по дампу
+# Настоящий каталог alfalot живёт на поддомене ecosystem, категория 7 = земля
+# (вытащено из живой страницы). Вероятно SPA — дамп покажет, нужен ли API.
+SEARCH_URL = "https://ecosystem.alfalot.ru/showcase/list"
+CATEGORY = 7
 
 _JUNK = {"подробнее", "показать", "найти", "сбросить", "ещё", "еще",
          "далее", "назад", "войти", "регистрация", "участок", "лот", "все лоты"}
@@ -24,13 +27,12 @@ class Source(BaseSource):
     name = "alfalot"
 
     def fetch(self) -> SourceResult:
-        s = self.session(UA)
+        s = requests.Session()
+        s.headers.update({"User-Agent": UA, "Accept-Language": "ru-RU,ru"})
         try:
             resp = s.get(SEARCH_URL,
-                         params={"q": "земельный участок",
-                                 "region": "Ленинградская область",
-                                 "price_to": self.cfg["hard"]["max_price_rub"]},
-                         timeout=25)
+                         params={"categories": CATEGORY},
+                         timeout=25, proxies=self.proxies())
             self.debug_dump(self.name, resp.text)
             if resp.status_code in (403, 429):
                 return SourceResult(self.name, SourceStatus.BLOCKED,
