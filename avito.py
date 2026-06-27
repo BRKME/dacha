@@ -1,24 +1,31 @@
 """Авито Недвижимость — приоритетный источник.
 
-Подход: внутренний JSON-API каталога Авито + curl_cffi с TLS-имитацией Chrome.
-Два слоя антибана сняты: IP (РФ-прокси из окружения) + TLS-фингерпринт
-(curl_cffi impersonate). Поведенческий слой не покрыт — возможна капча,
-тогда источник честно отдаёт BLOCKED, а сырой ответ падает в debug/avito_api.html
-для разбора (как делали с bank_torgi).
+Статус: антибот пройден (РФ-прокси + curl_cffi TLS-имитация — соединение
+устанавливается, путь доходит до Авито). Осталось нащупать рабочий внутренний
+эндпоинт каталога: прежний /web/1/main/items отдаёт 502.
 
-ВАЖНО: точные имена полей JSON и параметры (categoryId/locationId) выверяются
-по первому дампу. Парсер рассчитан на типовую структуру items[], подтвердить
-на живом ответе (DACHA_DEBUG=1 → debug/avito_api.html).
+Этот модуль ПЕРЕБИРАЕТ несколько кандидатов-эндпоинтов и сохраняет сырой
+ответ каждого в debug/avito_<tag>.html. Первый, отдавший валидный JSON со
+списком, используется как источник лотов; остальные — для разбора по дампам.
 """
 from __future__ import annotations
 
+import json
 import os
 
 from base import BaseSource, Listing, SourceResult, SourceStatus
 
-# Внутренний каталог Авито (web). Параметры выверить по дампу.
-# categoryId=24 — «Земельные участки»; locationId 643 — Ленобласть (подтвердить).
-API_URL = "https://www.avito.ru/web/1/main/items"
+PRICE_PARAM = "priceMax"
+
+# Кандидаты внутренних API каталога Авито. Параметры подставляются ниже.
+# tag нужен для имени дамп-файла. Перебор идёт сверху вниз до первого JSON.
+CANDIDATES = [
+    ("web9_js", "https://www.avito.ru/web/9/js/items"),
+    ("web1_js", "https://www.avito.ru/web/1/js/items"),
+    ("m_api9",  "https://m.avito.ru/api/9/items"),
+    ("m_api11", "https://m.avito.ru/api/11/items"),
+    ("web1_main", "https://www.avito.ru/web/1/main/items"),
+]
 SEARCH_URL = "https://www.avito.ru/leningradskaya_oblast/zemelnye_uchastki"
 
 
@@ -40,35 +47,48 @@ class Source(BaseSource):
         params = {
             "categoryId": 24,
             "locationId": 643,
-            "priceMax": self.cfg["hard"]["max_price_rub"],
+            PRICE_PARAM: self.cfg["hard"]["max_price_rub"],
             "sort": "date",
             "limit": 50,
-            "display": "list",
         }
-        try:
-            resp = creq.get(
-                API_URL,
-                params=params,
-                headers={"Accept": "application/json",
-                         "X-Requested-With": "XMLHttpRequest",
-                         "Accept-Language": "ru-RU,ru"},
-                impersonate="chrome",
-                proxies=proxies,
-                timeout=30,
-            )
-            self.debug_dump(self.name + "_api", resp.text)
-            if resp.status_code in (403, 429) or "firewall" in resp.text.lower():
-                self._dump_html_page(creq, proxies)
-                return SourceResult(
-                    self.name, SourceStatus.BLOCKED,
-                    message=f"HTTP {resp.status_code}/firewall "
-                            "(поведенческий слой; см. debug/avito_api.html)",
-                )
-            data = resp.json()
-        except Exception as e:  # noqa: BLE001
-            return SourceResult(self.name, SourceStatus.ERROR, message=str(e))
 
-        return SourceResult(self.name, SourceStatus.OK, listings=self._parse(data))
+        tried = []
+        for tag, url in CANDIDATES:
+            try:
+                resp = creq.get(
+                    url, params=params,
+                    headers={"Accept": "application/json",
+                             "Accept-Language": "ru-RU,ru"},
+                    impersonate="chrome", proxies=proxies, timeout=30,
+                )
+            except Exception as e:  # noqa: BLE001
+                tried.append(f"{tag}:err")
+                self.debug_dump(f"{self.name}_{tag}", f"EXC {e}")
+                continue
+
+            body = resp.text or ""
+            self.debug_dump(f"{self.name}_{tag}", body)
+            tried.append(f"{tag}:{resp.status_code}")
+
+            # пытаемся распарсить JSON
+            try:
+                data = json.loads(body)
+            except json.JSONDecodeError:
+                continue  # не JSON (502/HTML) — пробуем следующий
+
+            lots = self._parse(data)
+            return SourceResult(
+                self.name, SourceStatus.OK, listings=lots,
+                message=f"JSON от {tag} ({len(lots)} лотов); перебор: {', '.join(tried)}",
+            )
+
+        # ни один кандидат не отдал JSON — снимем ещё и HTML страницы
+        self._dump_html_page(creq, proxies)
+        return SourceResult(
+            self.name, SourceStatus.BLOCKED,
+            message=f"ни один эндпоинт не дал JSON: {', '.join(tried)} "
+                    "(см. debug/avito_*.html)",
+        )
 
     def _dump_html_page(self, creq, proxies) -> None:
         try:
@@ -79,17 +99,14 @@ class Source(BaseSource):
             pass
 
     def _parse(self, data: dict) -> list[Listing]:
-        """Разбор JSON-каталога. Структуру выверить по debug/avito_api.html:
-        лоты обычно в data['items'] или data['catalog']['items']."""
+        """Разбор JSON-каталога. Точные поля выверить по рабочему дампу."""
         out: list[Listing] = []
         items = (data.get("items")
                  or (data.get("catalog") or {}).get("items")
                  or (data.get("result") or {}).get("items")
                  or [])
         for it in items:
-            if not isinstance(it, dict):
-                continue
-            if it.get("type") not in (None, "item"):
+            if not isinstance(it, dict) or it.get("type") not in (None, "item"):
                 continue
             price = it.get("priceDetailed", {}) or {}
             coords = it.get("coords") or (it.get("location") or {}).get("coords") or {}
