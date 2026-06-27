@@ -1,10 +1,13 @@
-"""МЭТС — m-ets.ru (Межрегиональная электронная торговая система).
+"""МЭТС — m-ets.ru (банкротная ЭТП).
 
-CONFIDENCE: низко-средняя (scaffold). Банкротная ЭТП с поиском по лотам.
-Селекторы — каркас, фейлится безопасно (0 лотов при несовпадении, не мусор).
-Чинится по debug/m_ets.html (DACHA_DEBUG=1).
+Поиск кодирует запрос как base64(JSON) в параметре q: /search?q=<base64>.
+Этот модуль строит q сам, бьёт в /search, сохраняет ответ в debug/m_ets.html.
+Структуру выдачи (HTML или SPA) выверяем по первому реальному дампу.
 """
 from __future__ import annotations
+
+import base64
+import json
 
 import requests
 from bs4 import BeautifulSoup
@@ -14,21 +17,27 @@ from base import BaseSource, Listing, SourceResult, SourceStatus
 UA = ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
       "(KHTML, like Gecko) Chrome/124.0 Safari/537.36")
 
-SEARCH_URL = "https://m-ets.ru/trade/"   # каркас; реальный путь поиска уточнить по дампу
+SEARCH_URL = "https://m-ets.ru/search"
 
 _JUNK = {"подробнее", "показать", "найти", "сбросить", "ещё", "еще",
          "далее", "назад", "войти", "регистрация", "участок", "лот"}
+
+
+def _build_q(text: str) -> str:
+    """base64(urlsafe) от {"lots": text} — формат поиска m-ets."""
+    raw = json.dumps({"lots": text}, ensure_ascii=False, separators=(",", ":")).encode("utf-8")
+    return base64.urlsafe_b64encode(raw).decode("ascii").rstrip("=")
 
 
 class Source(BaseSource):
     name = "m_ets"
 
     def fetch(self) -> SourceResult:
-        s = self.session(UA)
+        s = requests.Session()
+        s.headers.update({"User-Agent": UA, "Accept-Language": "ru-RU,ru"})
         try:
             resp = s.get(SEARCH_URL,
-                         params={"q": "земельный участок Ленинградская область",
-                                 "category": "land"},
+                         params={"q": _build_q("земельный участок")},
                          timeout=25)
             self.debug_dump(self.name, resp.text)
             if resp.status_code in (403, 429):
