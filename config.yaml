@@ -45,15 +45,14 @@ locations:
 
 # Включённые источники. false → источник пропускается.
 sources:
-  mirkvartir:   true
   bank_torgi:   true    # lot-online / РАД
   m_ets:        true    # МЭТС — банкротные торги
   alfalot:      true    # Alfalot — агрегатор банкротных лотов
   sberbank_ast: true    # Сбербанк-АСТ, раздел Bankruptcy (SPA, нужен POST-API)
   yandex:       true
   domclick:     true
-  avito:        false   # основной по задаче, но нужен РФ-прокси/curl_cffi — путь не выбран
-  cian:         false   # Phase 2: нужен РФ residential-прокси
+  avito:        true    # JSON-API + curl_cffi (TLS-имитация) через прокси
+  cian:         false   # припаркован
 
 # Обогащение описаний через LLM (xAI Grok по умолчанию)
 enrich:
