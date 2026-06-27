@@ -2,4 +2,4 @@ requests>=2.31
 PyYAML>=6.0
 beautifulsoup4>=4.12
 PySocks>=1.7   # для socks5:// прокси
-curl_cffi>=0.7   # TLS-имитация Chrome для Авито
+playwright>=1.40   # реальный Chromium для Авито (обход Firewall)
