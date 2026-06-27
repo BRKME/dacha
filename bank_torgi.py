@@ -19,23 +19,27 @@ from base import BaseSource, Listing, SourceResult, SourceStatus
 UA = ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
       "(KHTML, like Gecko) Chrome/124.0 Safari/537.36")
 
-# Каркас. Подставить реальный поисковый эндпоинт выбранной площадки.
+# Реальная категория «Земельные участки» на lot-online = category_id=2
+# (вытащено из живого каталога). CS-Cart, серверный рендер.
 SEARCH_URL = "https://catalog.lot-online.ru/index.php"
+CATEGORY_ID = 2
 
 
 class Source(BaseSource):
     name = "bank_torgi"
 
     def fetch(self) -> SourceResult:
-        session = self.session(UA)
+        session = requests.Session()
+        session.headers.update({"User-Agent": UA, "Accept-Language": "ru-RU,ru"})
         listings: list[Listing] = []
         try:
             resp = session.get(
                 SEARCH_URL,
-                params={"dispatch": "products.search",
-                        "q": "земельный участок Ленинградская область",
-                        "price_to": self.cfg["hard"]["max_price_rub"]},
+                params={"dispatch": "categories.view",
+                        "category_id": CATEGORY_ID,
+                        "items_per_page": 100},
                 timeout=25,
+                proxies=self.proxies(),
             )
             self.debug_dump(self.name, resp.text)
             if resp.status_code in (403, 429):
